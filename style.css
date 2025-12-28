@@ -1,0 +1,46 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #fafafa;
+}
+
+.topbar {
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.post {
+  background: #fff;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.post-header {
+  padding: 10px;
+  font-weight: bold;
+}
+
+.post-media {
+  width: 100%;
+  max-height: 450px;
+  object-fit: cover;
+  background: #000;
+}
+
+.actions {
+  padding: 10px;
+  font-size: 22px;
+}
+
+.likes {
+  padding: 0 10px;
+  font-weight: bold;
+}
+
+.caption {
+  padding: 5px 10px 10px;
+  color: #333;
+}
