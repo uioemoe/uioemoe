@@ -1,57 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YouTube UI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-body {
-  text-align: center;
-  font-family: "Noto Sans Kannada", system-ui, sans-serif;
-}
-
-.poster {
-  width: 100%;
-  max-width: 165px;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
-
-/* RGB blinking animation */
-@keyframes rgbBlink {
-  0%   { color: red; }
-  33%  { color: lime; }
-  66%  { color: blue; }
-  100% { color: red; }
-}
-
-.link-text {
-  font-weight: bold;
-  text-decoration: none;
-  display: inline-block;
-  margin-top: 10px;
-  animation: rgbBlink 1.2s infinite;
-}
-
-.link-text:hover {
-  text-decoration: underline;
-}
+body{margin:0;font-family:Arial;background:#f9f9f9}
+.header{height:56px;background:#fff;display:flex;align-items:center;padding:0 16px;border-bottom:1px solid #ddd}
+.logo{color:red;font-size:20px;font-weight:bold}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;padding:16px}
+.card{cursor:pointer}
+.card img{width:100%;border-radius:8px}
+.title{font-size:14px;font-weight:bold;margin-top:8px}
 </style>
 </head>
 
 <body>
 
-<img src="https://i.ibb.co/kPWxLmS/IMG-20251213-180236.jpg"
-     alt="Eesha"
-     class="poster">
+<div class="header">
+  <div class="logo">YouTube</div>
+</div>
 
-<a href="https://uioemoe.xo.je" class="link-text">
-👉 ನನ್ನ ಹೆಸರು ಸದಾಶಿವ ನಾನು ದಿನಾಲೂ ದನಾ ಕಾಳುತೇನೆ 
-👉ಮತ್ತು ನಾನು Youtube ಕಂಡುಹಿಡಿದಿದ್ದೇನೆ
+<div class="grid">
 
-ಅದನು ನೋಡಲು 👆 ಮೇಲೆ ಕ್ಲಿಕ್ ಮಾಡಿ 
+<a href="player.html?vid=UB1O30fR-EE">
+  <div class="card">
+    <img src="https://img.youtube.com/vi/UB1O30fR-EE/mqdefault.jpg">
+    <div class="title">HTML Full Course</div>
+  </div>
 </a>
+
+<a href="player.html?vid=PkZNo7MFNFg">
+  <div class="card">
+    <img src="https://img.youtube.com/vi/PkZNo7MFNFg/mqdefault.jpg">
+    <div class="title">JavaScript for Beginners</div>
+  </div>
+</a>
+
+</div>
 
 </body>
 </html>
