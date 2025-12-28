@@ -1,74 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Player</title>
 
 <style>
-body {
-  text-align: center;
-  font-family: "Noto Sans Kannada", system-ui, sans-serif;
+body{
+  margin:0;
+  background:#000;
+  color:#fff;
+  font-family: Arial, sans-serif;
+  text-align:center;
 }
 
-.poster {
-  width: 100%;
-  max-width: 165px;
-  height: auto;
-  display: block;
-  margin: 0 auto;
+.video-box{
+  max-width:100%;
+  margin:auto;
 }
 
-/* RGB blinking animation */
-@keyframes rgbBlink {
-  0%   { color: red; }
-  33%  { color: lime; }
-  66%  { color: blue; }
-  100% { color: red; }
+video{
+  width:100%;
+  height:auto;
+  background:#000;
 }
 
-.link-text {
-  font-weight: bold;
-  text-decoration: none;
-  display: inline-block;
-  margin-top: 10px;
-  animation: rgbBlink 1.2s infinite;
+.buttons{
+  margin:15px;
 }
 
-.link-text:hover {
-  text-decoration: underline;
+.buttons a{
+  display:inline-block;
+  margin:8px;
+  padding:12px 18px;
+  background:#ff0000;
+  color:#fff;
+  text-decoration:none;
+  border-radius:6px;
+  font-weight:bold;
+}
+
+.buttons a.download{
+  background:#008000;
 }
 </style>
 </head>
 
 <body>
 
-<img src="https://i.ibb.co/kPWxLmS/IMG-20251213-180236.jpg"
-     alt="Eesha"
-     class="poster">
+<div class="video-box">
+  <video controls playsinline>
+    <source src="https://bcdn2.hakunaymatata.com/resource/h265/2e828cb36347f8bc564ba636938297f4.mp4?sign=cba8c9b0af6fda33111bab31bd5d43c5&t=1766906716" type="video/mp4">
+    Your browser does not support video.
+  </video>
+</div>
 
-<a href="https://www.instagram.com/p/C_7JtJwTuwS/?igsh=MXZ6dzFsY2Z1Y29idg==
-class="link-text" 
-   target="_blank">
-👉 ನನ್ನ ಹೆಸರು ಸದಾಶಿವ ನಾನು Instagram ನಲ್ಲಿ post ಹಾಕಿದ್ದೇನೆ ದಯವಿಟ್ಟು ನೋಡಿ 
+<div class="buttons">
+  <a href="https://bcdn2.hakunaymatata.com/resource/h265/2e828cb36347f8bc564ba636938297f4.mp4?sign=cba8c9b0af6fda33111bab31bd5d43c5&t=1766906716"
+     target="_blank">
+     ▶ Open Video
+  </a>
 
-      ಅದನು ನೋಡಲು ಮೇಲೆ ಕ್ಲಿಕ್ ಮಾಡಿ 
-                   👆
-</a>
-
-
-
-
-
-
-
-<a href="https://www.instagram.com/saduchimmad?igsh=MWdmanJpOTc0YWpzdw==" 
-   class="link-text" 
-   target="_blank">
- My Instagram I’d 👉@saduchimmad
-</a>
-
-
-
+  <a class="download"
+     href="https://bcdn2.hakunaymatata.com/resource/h265/2e828cb36347f8bc564ba636938297f4.mp4?sign=cba8c9b0af6fda33111bab31bd5d43c5&t=1766906716"
+     download>
+     ⬇ Download
+  </a>
+</div>
 
 </body>
 </html>
