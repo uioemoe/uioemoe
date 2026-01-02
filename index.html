@@ -93,9 +93,67 @@
             color: var(--text-light);
         }
 
+        /* Auth Modal */
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .auth-modal-content {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .auth-modal h2 {
+            margin-bottom: 20px;
+            color: var(--text-dark);
+        }
+
+        .auth-modal p {
+            margin-bottom: 30px;
+            color: var(--text-light);
+        }
+
+        .google-signin-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        .google-signin-btn:hover {
+            background-color: #357ae8;
+        }
+
+        .google-signin-btn i {
+            font-size: 20px;
+        }
+
         .nav-icons {
             display: flex;
             gap: 20px;
+            align-items: center;
         }
 
         .nav-icons a {
@@ -109,10 +167,21 @@
         }
 
         .user-avatar {
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             object-fit: cover;
+            cursor: pointer;
+        }
+
+        .sign-out-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
         }
 
         /* Main Content */
@@ -254,6 +323,10 @@
             color: var(--text-dark);
             cursor: pointer;
             transition: color 0.3s;
+        }
+
+        .post-action.liked {
+            color: var(--primary-color);
         }
 
         .post-action:hover {
@@ -440,6 +513,18 @@
             margin-top: 20px;
         }
 
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-light);
+        }
+
+        .error {
+            text-align: center;
+            padding: 40px;
+            color: var(--primary-color);
+        }
+
         /* Responsive Design */
         @media (max-width: 992px) {
             .sidebar {
@@ -484,207 +569,56 @@
             
             <div class="search-box">
                 <i class="fas fa-search"></i>
-                <input type="text" placeholder="Search">
+                <input type="text" placeholder="Search" id="searchInput">
             </div>
             
-            <div class="nav-icons">
-                <a href="#"><i class="fas fa-home"></i></a>
-                <a href="#"><i class="fas fa-paper-plane"></i></a>
-                <a href="#"><i class="fas fa-compass"></i></a>
-                <a href="#"><i class="fas fa-heart"></i></a>
-                <a href="#"><img src="https://images.unsplash.com/photo-1494790108755-2616c113a1c1?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User" class="user-avatar"></a>
+            <div class="nav-icons" id="navIcons">
+                <!-- Will be populated by JavaScript -->
             </div>
         </div>
     </header>
 
+    <!-- Auth Modal -->
+    <div class="auth-modal" id="authModal">
+        <div class="auth-modal-content">
+            <h2>Welcome to InstaConnect</h2>
+            <p>Sign in to share your moments and connect with friends</p>
+            <button class="google-signin-btn" id="googleSignInBtn">
+                <i class="fab fa-google"></i>
+                Sign in with Google
+            </button>
+            <p style="margin-top: 20px; font-size: 14px; color: #666;">By signing in, you agree to our Terms and Privacy Policy</p>
+        </div>
+    </div>
+
     <!-- Main Content -->
     <div class="container main-content">
         <!-- Posts Section -->
-        <div class="posts-container">
-            <!-- Stories -->
-            <div class="stories-container">
-                <div class="stories-title">STORIES</div>
-                <div class="stories">
-                    <div class="story">
-                        <div class="story-avatar">
-                            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User">
-                        </div>
-                        <div class="story-username">johndoe</div>
-                    </div>
-                    <div class="story">
-                        <div class="story-avatar">
-                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User">
-                        </div>
-                        <div class="story-username">janedoe</div>
-                    </div>
-                    <div class="story">
-                        <div class="story-avatar">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User">
-                        </div>
-                        <div class="story-username">mike_w</div>
-                    </div>
-                    <div class="story">
-                        <div class="story-avatar">
-                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User">
-                        </div>
-                        <div class="story-username">amanda_s</div>
-                    </div>
-                    <div class="story">
-                        <div class="story-avatar">
-                            <img src="https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User">
-                        </div>
-                        <div class="story-username">robert_j</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Post 1 -->
-            <div class="post">
-                <div class="post-header">
-                    <div class="post-user">
-                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User" class="post-user-avatar">
-                        <div class="post-user-info">
-                            <div class="post-username">johndoe</div>
-                            <div class="post-location">New York, USA</div>
-                        </div>
-                    </div>
-                    <div class="post-options">
-                        <i class="fas fa-ellipsis-h"></i>
-                    </div>
-                </div>
-                
-                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80" alt="Post Image" class="post-image">
-                
-                <div class="post-actions">
-                    <div class="post-actions-left">
-                        <div class="post-action"><i class="far fa-heart"></i></div>
-                        <div class="post-action"><i class="far fa-comment"></i></div>
-                        <div class="post-action"><i class="far fa-paper-plane"></i></div>
-                    </div>
-                    <div class="post-action"><i class="far fa-bookmark"></i></div>
-                </div>
-                
-                <div class="post-likes">2,543 likes</div>
-                
-                <div class="post-caption">
-                    <span class="post-caption-username">johndoe</span>
-                    Beautiful sunset at the lake! #nature #sunset #photography
-                </div>
-                
-                <div class="post-comments">View all 124 comments</div>
-                
-                <div class="post-time">2 hours ago</div>
-                
-                <div class="add-comment">
-                    <input type="text" placeholder="Add a comment...">
-                    <button>Post</button>
-                </div>
-            </div>
-
-            <!-- Post 2 -->
-            <div class="post">
-                <div class="post-header">
-                    <div class="post-user">
-                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User" class="post-user-avatar">
-                        <div class="post-user-info">
-                            <div class="post-username">janedoe</div>
-                            <div class="post-location">Paris, France</div>
-                        </div>
-                    </div>
-                    <div class="post-options">
-                        <i class="fas fa-ellipsis-h"></i>
-                    </div>
-                </div>
-                
-                <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80" alt="Post Image" class="post-image">
-                
-                <div class="post-actions">
-                    <div class="post-actions-left">
-                        <div class="post-action"><i class="far fa-heart"></i></div>
-                        <div class="post-action"><i class="far fa-comment"></i></div>
-                        <div class="post-action"><i class="far fa-paper-plane"></i></div>
-                    </div>
-                    <div class="post-action"><i class="far fa-bookmark"></i></div>
-                </div>
-                
-                <div class="post-likes">3,421 likes</div>
-                
-                <div class="post-caption">
-                    <span class="post-caption-username">janedoe</span>
-                    Mountain adventures! ⛰️ #hiking #mountains #outdoors
-                </div>
-                
-                <div class="post-comments">View all 89 comments</div>
-                
-                <div class="post-time">5 hours ago</div>
-                
-                <div class="add-comment">
-                    <input type="text" placeholder="Add a comment...">
-                    <button>Post</button>
-                </div>
+        <div class="posts-container" id="postsContainer">
+            <div class="loading" id="loadingPosts">
+                <i class="fas fa-spinner fa-spin"></i> Loading...
             </div>
         </div>
 
         <!-- Sidebar -->
         <div class="sidebar">
             <!-- User Profile -->
-            <div class="user-profile">
-                <img src="https://images.unsplash.com/photo-1494790108755-2616c113a1c1?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User" class="user-profile-avatar">
+            <div class="user-profile" id="sidebarUserProfile" style="display: none;">
+                <img id="sidebarUserAvatar" src="" alt="User" class="user-profile-avatar">
                 <div class="user-profile-info">
-                    <div class="user-profile-username">yourusername</div>
-                    <div class="user-profile-name">Alex Johnson</div>
+                    <div class="user-profile-username" id="sidebarUsername"></div>
+                    <div class="user-profile-name" id="sidebarFullName"></div>
                 </div>
             </div>
 
             <!-- Suggestions -->
-            <div class="suggestions">
+            <div class="suggestions" id="suggestionsContainer" style="display: none;">
                 <div class="suggestions-header">
                     <div class="suggestions-title">Suggestions For You</div>
                     <a href="#" class="suggestions-see-all">See All</a>
                 </div>
-                
-                <div class="suggestion">
-                    <div class="suggestion-user">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User" class="suggestion-avatar">
-                        <div class="suggestion-info">
-                            <div class="suggestion-username">mike_w</div>
-                            <div class="suggestion-desc">Followed by johndoe + 2 more</div>
-                        </div>
-                    </div>
-                    <div class="suggestion-follow">Follow</div>
-                </div>
-                
-                <div class="suggestion">
-                    <div class="suggestion-user">
-                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User" class="suggestion-avatar">
-                        <div class="suggestion-info">
-                            <div class="suggestion-username">amanda_s</div>
-                            <div class="suggestion-desc">New to InstaConnect</div>
-                        </div>
-                    </div>
-                    <div class="suggestion-follow">Follow</div>
-                </div>
-                
-                <div class="suggestion">
-                    <div class="suggestion-user">
-                        <img src="https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User" class="suggestion-avatar">
-                        <div class="suggestion-info">
-                            <div class="suggestion-username">robert_j</div>
-                            <div class="suggestion-desc">Followed by janedoe</div>
-                        </div>
-                    </div>
-                    <div class="suggestion-follow">Follow</div>
-                </div>
-                
-                <div class="suggestion">
-                    <div class="suggestion-user">
-                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User" class="suggestion-avatar">
-                        <div class="suggestion-info">
-                            <div class="suggestion-username">sarah_m</div>
-                            <div class="suggestion-desc">Popular photographer</div>
-                        </div>
-                    </div>
-                    <div class="suggestion-follow">Follow</div>
+                <div id="suggestionsList">
+                    <!-- Suggestions will be loaded here -->
                 </div>
             </div>
 
@@ -707,93 +641,659 @@
         </div>
     </div>
 
-    <script>
-        // Like functionality
-        document.querySelectorAll('.post-action .fa-heart').forEach(heart => {
-            heart.addEventListener('click', function() {
-                if (this.classList.contains('far')) {
-                    this.classList.remove('far');
-                    this.classList.add('fas');
-                    this.style.color = '#E1306C';
-                    
-                    // Update like count
-                    const likesElement = this.closest('.post').querySelector('.post-likes');
-                    const currentLikes = parseInt(likesElement.textContent.replace(/,/g, ''));
-                    likesElement.textContent = (currentLikes + 1).toLocaleString() + ' likes';
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import the functions you need from the SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
+        import { 
+            getAuth, 
+            GoogleAuthProvider, 
+            signInWithPopup, 
+            signOut, 
+            onAuthStateChanged 
+        } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            setDoc, 
+            getDoc, 
+            updateDoc, 
+            arrayUnion, 
+            arrayRemove,
+            collection,
+            addDoc,
+            query,
+            where,
+            getDocs,
+            serverTimestamp,
+            onSnapshot
+        } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+        // Your Firebase configuration from your project
+        const firebaseConfig = {
+            apiKey: "AIzaSyAOUulO8QJvqnbgxxPYgsbTGv5KBsKAhkI",
+            authDomain: "uioemoe.firebaseapp.com",
+            projectId: "uioemoe",
+            storageBucket: "uioemoe.firebasestorage.app",
+            messagingSenderId: "287689150192",
+            appId: "1:287689150192:web:2d74235978235050977c35",
+            measurementId: "G-C3EWTXC52E"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth();
+        const db = getFirestore();
+
+        // DOM Elements
+        const authModal = document.getElementById('authModal');
+        const googleSignInBtn = document.getElementById('googleSignInBtn');
+        const navIcons = document.getElementById('navIcons');
+        const postsContainer = document.getElementById('postsContainer');
+        const loadingPosts = document.getElementById('loadingPosts');
+        const sidebarUserProfile = document.getElementById('sidebarUserProfile');
+        const sidebarUserAvatar = document.getElementById('sidebarUserAvatar');
+        const sidebarUsername = document.getElementById('sidebarUsername');
+        const sidebarFullName = document.getElementById('sidebarFullName');
+        const suggestionsContainer = document.getElementById('suggestionsContainer');
+        const suggestionsList = document.getElementById('suggestionsList');
+
+        // Sample posts data
+        const samplePosts = [
+            {
+                id: 'post1',
+                username: 'johndoe',
+                location: 'New York, USA',
+                userAvatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80',
+                imageUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80',
+                caption: 'Beautiful sunset at the lake! #nature #sunset #photography',
+                timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
+                initialLikes: 2543,
+                initialComments: 124
+            },
+            {
+                id: 'post2',
+                username: 'janedoe',
+                location: 'Paris, France',
+                userAvatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80',
+                imageUrl: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80',
+                caption: 'Mountain adventures! ⛰️ #hiking #mountains #outdoors',
+                timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000),
+                initialLikes: 3421,
+                initialComments: 89
+            },
+            {
+                id: 'post3',
+                username: 'traveler_adam',
+                location: 'Tokyo, Japan',
+                userAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80',
+                imageUrl: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80',
+                caption: 'Cherry blossom season in Tokyo! 🌸 #japan #tokyo #travel',
+                timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+                initialLikes: 1895,
+                initialComments: 67
+            }
+        ];
+
+        // Sample users for suggestions
+        const sampleUsers = [
+            {
+                username: 'mike_w',
+                fullName: 'Mike Wilson',
+                avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80',
+                description: 'Followed by johndoe + 2 more'
+            },
+            {
+                username: 'amanda_s',
+                fullName: 'Amanda Smith',
+                avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80',
+                description: 'New to InstaConnect'
+            },
+            {
+                username: 'robert_j',
+                fullName: 'Robert Johnson',
+                avatar: 'https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80',
+                description: 'Followed by janedoe'
+            }
+        ];
+
+        // Initialize the app
+        function initApp() {
+            // Check authentication state
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    // User is signed in
+                    await handleUserSignedIn(user);
                 } else {
-                    this.classList.remove('fas');
-                    this.classList.add('far');
-                    this.style.color = '';
-                    
-                    // Update like count
-                    const likesElement = this.closest('.post').querySelector('.post-likes');
-                    const currentLikes = parseInt(likesElement.textContent.replace(/,/g, ''));
-                    likesElement.textContent = (currentLikes - 1).toLocaleString() + ' likes';
+                    // User is signed out
+                    handleUserSignedOut();
                 }
             });
-        });
 
-        // Bookmark functionality
-        document.querySelectorAll('.post-action .fa-bookmark').forEach(bookmark => {
-            bookmark.addEventListener('click', function() {
-                if (this.classList.contains('far')) {
-                    this.classList.remove('far');
-                    this.classList.add('fas');
-                } else {
-                    this.classList.remove('fas');
-                    this.classList.add('far');
-                }
-            });
-        });
+            // Google Sign In
+            googleSignInBtn.addEventListener('click', handleGoogleSignIn);
+        }
 
-        // Follow button functionality
-        document.querySelectorAll('.suggestion-follow').forEach(button => {
-            button.addEventListener('click', function() {
-                if (this.textContent === 'Follow') {
-                    this.textContent = 'Following';
-                    this.style.color = '#262626';
-                } else {
-                    this.textContent = 'Follow';
-                    this.style.color = '#E1306C';
-                }
-            });
-        });
+        // Handle user signed in
+        async function handleUserSignedIn(user) {
+            console.log('User signed in:', user);
+            showUserInfo(user);
+            hideAuthModal();
+            await checkOrCreateUserProfile(user);
+            await loadPosts();
+            loadSuggestions();
+        }
 
-        // Comment posting
-        document.querySelectorAll('.add-comment button').forEach(button => {
-            button.addEventListener('click', function() {
-                const commentInput = this.previousElementSibling;
-                const commentText = commentInput.value.trim();
+        // Handle user signed out
+        function handleUserSignedOut() {
+            console.log('User signed out');
+            showAuthModal();
+            hideUserInfo();
+            clearPosts();
+        }
+
+        // Handle Google sign in
+        async function handleGoogleSignIn() {
+            try {
+                const provider = new GoogleAuthProvider();
+                const result = await signInWithPopup(auth, provider);
+                console.log('Sign in successful:', result.user);
+            } catch (error) {
+                console.error('Error signing in:', error);
+                alert('Error signing in: ' + error.message);
+            }
+        }
+
+        // Check or create user profile in Firestore
+        async function checkOrCreateUserProfile(user) {
+            try {
+                const userRef = doc(db, 'users', user.uid);
+                const userDoc = await getDoc(userRef);
                 
-                if (commentText) {
-                    const post = this.closest('.post');
-                    const commentsElement = post.querySelector('.post-comments');
-                    
-                    // Update comment count
-                    const currentCommentsText = commentsElement.textContent;
-                    const commentCount = parseInt(currentCommentsText.match(/\d+/)[0]);
-                    commentsElement.textContent = `View all ${commentCount + 1} comments`;
-                    
-                    // Clear input
-                    commentInput.value = '';
-                    
-                    // Show success message
-                    const originalText = this.textContent;
-                    this.textContent = 'Posted!';
-                    setTimeout(() => {
-                        this.textContent = originalText;
-                    }, 1500);
+                if (!userDoc.exists()) {
+                    // Create new user profile
+                    await setDoc(userRef, {
+                        uid: user.uid,
+                        email: user.email,
+                        displayName: user.displayName || user.email.split('@')[0],
+                        username: user.email.split('@')[0],
+                        photoURL: user.photoURL || 'https://images.unsplash.com/photo-1494790108755-2616c113a1c1?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80',
+                        bio: '',
+                        followers: 0,
+                        following: 0,
+                        createdAt: serverTimestamp(),
+                        updatedAt: serverTimestamp()
+                    });
+                    console.log('New user profile created');
+                } else {
+                    console.log('User profile already exists');
                 }
-            });
+            } catch (error) {
+                console.error('Error creating user profile:', error);
+            }
+        }
+
+        // Load posts
+        async function loadPosts() {
+            try {
+                loadingPosts.style.display = 'block';
+                
+                // Clear posts container
+                postsContainer.innerHTML = '';
+                
+                // Add stories section
+                const storiesHTML = `
+                    <div class="stories-container">
+                        <div class="stories-title">STORIES</div>
+                        <div class="stories">
+                            ${sampleUsers.map(user => `
+                                <div class="story">
+                                    <div class="story-avatar">
+                                        <img src="${user.avatar}" alt="${user.username}">
+                                    </div>
+                                    <div class="story-username">${user.username}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                
+                postsContainer.innerHTML = storiesHTML;
+                
+                // Load posts from Firestore
+                const postsRef = collection(db, 'posts');
+                const postsSnapshot = await getDocs(postsRef);
+                
+                if (postsSnapshot.empty) {
+                    // Create sample posts if none exist
+                    await createSamplePosts();
+                    // Reload posts
+                    return loadPosts();
+                }
+                
+                // Get current user for like status
+                const currentUser = auth.currentUser;
+                
+                // Display posts from Firestore
+                postsSnapshot.forEach(async (docSnap) => {
+                    const post = docSnap.data();
+                    const postId = docSnap.id;
+                    
+                    // Check if current user liked this post
+                    const liked = currentUser ? await checkIfLiked(postId, currentUser.uid) : false;
+                    
+                    const postElement = createPostElement(post, postId, liked);
+                    postsContainer.appendChild(postElement);
+                });
+                
+                loadingPosts.style.display = 'none';
+                
+            } catch (error) {
+                console.error('Error loading posts:', error);
+                loadingPosts.innerHTML = '<div class="error">Error loading posts. Please refresh the page.</div>';
+            }
+        }
+
+        // Create sample posts in Firestore
+        async function createSamplePosts() {
+            try {
+                for (const post of samplePosts) {
+                    const postRef = doc(collection(db, 'posts'));
+                    await setDoc(postRef, {
+                        ...post,
+                        likesCount: post.initialLikes,
+                        commentsCount: post.initialComments,
+                        createdAt: serverTimestamp(),
+                        updatedAt: serverTimestamp(),
+                        likedBy: [] // Initialize empty likedBy array
+                    });
+                }
+                console.log('Sample posts created');
+            } catch (error) {
+                console.error('Error creating sample posts:', error);
+            }
+        }
+
+        // Check if user liked a post
+        async function checkIfLiked(postId, userId) {
+            try {
+                const postRef = doc(db, 'posts', postId);
+                const postDoc = await getDoc(postRef);
+                
+                if (postDoc.exists()) {
+                    const postData = postDoc.data();
+                    return postData.likedBy && postData.likedBy.includes(userId);
+                }
+                return false;
+            } catch (error) {
+                console.error('Error checking like status:', error);
+                return false;
+            }
+        }
+
+        // Create post HTML element
+        function createPostElement(post, postId, isLiked = false) {
+            const postElement = document.createElement('div');
+            postElement.className = 'post';
+            postElement.id = `post-${postId}`;
             
-            // Allow pressing Enter to post comment
-            const commentInput = button.previousElementSibling;
-            commentInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    button.click();
-                }
-            });
+            const timeAgo = getTimeAgo(post.timestamp?.toDate() || new Date());
+            
+            postElement.innerHTML = `
+                <div class="post-header">
+                    <div class="post-user">
+                        <img src="${post.userAvatar}" alt="${post.username}" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-username">${post.username}</div>
+                            <div class="post-location">${post.location}</div>
+                        </div>
+                    </div>
+                    <div class="post-options">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </div>
+                </div>
+                
+                <img src="${post.imageUrl}" alt="Post Image" class="post-image">
+                
+                <div class="post-actions">
+                    <div class="post-actions-left">
+                        <div class="post-action like-btn ${isLiked ? 'liked' : ''}" data-post-id="${postId}">
+                            <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i>
+                        </div>
+                        <div class="post-action">
+                            <i class="far fa-comment"></i>
+                        </div>
+                        <div class="post-action">
+                            <i class="far fa-paper-plane"></i>
+                        </div>
+                    </div>
+                    <div class="post-action save-btn" data-post-id="${postId}">
+                        <i class="far fa-bookmark"></i>
+                    </div>
+                </div>
+                
+                <div class="post-likes" id="likes-count-${postId}">${formatNumber(post.likesCount || 0)} likes</div>
+                
+                <div class="post-caption">
+                    <span class="post-caption-username">${post.username}</span>
+                    ${post.caption}
+                </div>
+                
+                <div class="post-comments">View all ${post.commentsCount || 0} comments</div>
+                
+                <div class="post-time">${timeAgo}</div>
+                
+                <div class="add-comment">
+                    <input type="text" placeholder="Add a comment..." class="comment-input" data-post-id="${postId}">
+                    <button class="comment-btn" data-post-id="${postId}">Post</button>
+                </div>
+            `;
+            
+            return postElement;
+        }
+
+        // Load suggestions
+        function loadSuggestions() {
+            suggestionsList.innerHTML = sampleUsers.map(user => `
+                <div class="suggestion">
+                    <div class="suggestion-user">
+                        <img src="${user.avatar}" alt="${user.username}" class="suggestion-avatar">
+                        <div class="suggestion-info">
+                            <div class="suggestion-username">${user.username}</div>
+                            <div class="suggestion-desc">${user.description}</div>
+                        </div>
+                    </div>
+                    <div class="suggestion-follow">Follow</div>
+                </div>
+            `).join('');
+            
+            suggestionsContainer.style.display = 'block';
+        }
+
+        // Show user info in header
+        function showUserInfo(user) {
+            navIcons.innerHTML = `
+                <a href="#"><i class="fas fa-home"></i></a>
+                <a href="#"><i class="fas fa-paper-plane"></i></a>
+                <a href="#"><i class="fas fa-compass"></i></a>
+                <a href="#"><i class="fas fa-heart"></i></a>
+                <img src="${user.photoURL || 'https://images.unsplash.com/photo-1494790108755-2616c113a1c1?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80'}" 
+                     alt="User" class="user-avatar" id="headerUserAvatar">
+                <button class="sign-out-btn" id="signOutBtn">Sign Out</button>
+            `;
+            
+            // Update sidebar
+            sidebarUserProfile.style.display = 'flex';
+            sidebarUserAvatar.src = user.photoURL || 'https://images.unsplash.com/photo-1494790108755-2616c113a1c1?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80';
+            sidebarUsername.textContent = user.displayName || user.email.split('@')[0];
+            sidebarFullName.textContent = user.displayName || 'InstaConnect User';
+            
+            // Add sign out event listener
+            document.getElementById('signOutBtn').addEventListener('click', handleSignOut);
+        }
+
+        // Handle sign out
+        async function handleSignOut() {
+            try {
+                await signOut(auth);
+            } catch (error) {
+                console.error('Error signing out:', error);
+            }
+        }
+
+        // Hide user info
+        function hideUserInfo() {
+            navIcons.innerHTML = '';
+            sidebarUserProfile.style.display = 'none';
+            suggestionsContainer.style.display = 'none';
+        }
+
+        // Show auth modal
+        function showAuthModal() {
+            authModal.style.display = 'flex';
+        }
+
+        // Hide auth modal
+        function hideAuthModal() {
+            authModal.style.display = 'none';
+        }
+
+        // Clear posts
+        function clearPosts() {
+            postsContainer.innerHTML = '<div class="loading">Please sign in to see posts</div>';
+        }
+
+        // Format numbers with commas
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // Get time ago string
+        function getTimeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            
+            let interval = Math.floor(seconds / 31536000);
+            if (interval >= 1) return interval + " year" + (interval === 1 ? "" : "s") + " ago";
+            
+            interval = Math.floor(seconds / 2592000);
+            if (interval >= 1) return interval + " month" + (interval === 1 ? "" : "s") + " ago";
+            
+            interval = Math.floor(seconds / 86400);
+            if (interval >= 1) return interval + " day" + (interval === 1 ? "" : "s") + " ago";
+            
+            interval = Math.floor(seconds / 3600);
+            if (interval >= 1) return interval + " hour" + (interval === 1 ? "" : "s") + " ago";
+            
+            interval = Math.floor(seconds / 60);
+            if (interval >= 1) return interval + " minute" + (interval === 1 ? "" : "s") + " ago";
+            
+            return Math.floor(seconds) + " second" + (seconds === 1 ? "" : "s") + " ago";
+        }
+
+        // Event delegation for post interactions
+        document.addEventListener('click', async (e) => {
+            // Like button clicked
+            if (e.target.closest('.like-btn')) {
+                const likeBtn = e.target.closest('.like-btn');
+                const postId = likeBtn.dataset.postId;
+                await handleLike(postId, likeBtn);
+            }
+            
+            // Save button clicked
+            if (e.target.closest('.save-btn')) {
+                const saveBtn = e.target.closest('.save-btn');
+                const postId = saveBtn.dataset.postId;
+                handleSave(postId, saveBtn);
+            }
+            
+            // Comment button clicked
+            if (e.target.closest('.comment-btn')) {
+                const commentBtn = e.target.closest('.comment-btn');
+                const postId = commentBtn.dataset.postId;
+                await handleComment(postId);
+            }
+            
+            // Follow button clicked
+            if (e.target.closest('.suggestion-follow')) {
+                const followBtn = e.target.closest('.suggestion-follow');
+                handleFollow(followBtn);
+            }
         });
+
+        // Handle like functionality
+        async function handleLike(postId, likeBtn) {
+            const user = auth.currentUser;
+            if (!user) {
+                showAuthModal();
+                return;
+            }
+            
+            const heartIcon = likeBtn.querySelector('i');
+            const likesCountElement = document.getElementById(`likes-count-${postId}`);
+            const currentLikes = parseInt(likesCountElement.textContent.replace(/,/g, '').split(' ')[0]);
+            
+            try {
+                const postRef = doc(db, 'posts', postId);
+                const postDoc = await getDoc(postRef);
+                
+                if (!postDoc.exists()) {
+                    console.error('Post not found');
+                    return;
+                }
+                
+                const postData = postDoc.data();
+                const likedBy = postData.likedBy || [];
+                const isLiked = likedBy.includes(user.uid);
+                
+                if (isLiked) {
+                    // Unlike the post
+                    await updateDoc(postRef, {
+                        likedBy: arrayRemove(user.uid),
+                        likesCount: (postData.likesCount || 1) - 1,
+                        updatedAt: serverTimestamp()
+                    });
+                    
+                    // Update UI
+                    likeBtn.classList.remove('liked');
+                    heartIcon.classList.remove('fas');
+                    heartIcon.classList.add('far');
+                    likesCountElement.textContent = `${formatNumber(currentLikes - 1)} likes`;
+                    
+                    console.log('Post unliked');
+                } else {
+                    // Like the post
+                    await updateDoc(postRef, {
+                        likedBy: arrayUnion(user.uid),
+                        likesCount: (postData.likesCount || 0) + 1,
+                        updatedAt: serverTimestamp()
+                    });
+                    
+                    // Update UI
+                    likeBtn.classList.add('liked');
+                    heartIcon.classList.remove('far');
+                    heartIcon.classList.add('fas');
+                    likesCountElement.textContent = `${formatNumber(currentLikes + 1)} likes`;
+                    
+                    console.log('Post liked');
+                }
+                
+            } catch (error) {
+                console.error('Error handling like:', error);
+                alert('Error updating like. Please try again.');
+            }
+        }
+
+        // Handle save functionality
+        function handleSave(postId, saveBtn) {
+            const bookmarkIcon = saveBtn.querySelector('i');
+            
+            if (bookmarkIcon.classList.contains('far')) {
+                bookmarkIcon.classList.remove('far');
+                bookmarkIcon.classList.add('fas');
+                console.log('Post saved');
+            } else {
+                bookmarkIcon.classList.remove('fas');
+                bookmarkIcon.classList.add('far');
+                console.log('Post unsaved');
+            }
+        }
+
+        // Handle comment functionality
+        async function handleComment(postId) {
+            const commentInput = document.querySelector(`.comment-input[data-post-id="${postId}"]`);
+            const commentBtn = document.querySelector(`.comment-btn[data-post-id="${postId}"]`);
+            const commentText = commentInput.value.trim();
+            
+            if (!commentText) return;
+            
+            const user = auth.currentUser;
+            if (!user) {
+                showAuthModal();
+                return;
+            }
+            
+            try {
+                // Create comment in Firestore
+                const commentsRef = collection(db, 'comments');
+                await addDoc(commentsRef, {
+                    postId: postId,
+                    userId: user.uid,
+                    username: user.displayName || user.email.split('@')[0],
+                    userAvatar: user.photoURL || 'https://images.unsplash.com/photo-1494790108755-2616c113a1c1?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80',
+                    text: commentText,
+                    createdAt: serverTimestamp()
+                });
+                
+                // Update post comment count
+                const postRef = doc(db, 'posts', postId);
+                const postDoc = await getDoc(postRef);
+                
+                if (postDoc.exists()) {
+                    const postData = postDoc.data();
+                    await updateDoc(postRef, {
+                        commentsCount: (postData.commentsCount || 0) + 1,
+                        updatedAt: serverTimestamp()
+                    });
+                    
+                    // Update UI
+                    const commentsElement = document.querySelector(`#post-${postId} .post-comments`);
+                    const currentComments = parseInt(commentsElement.textContent.match(/\d+/)[0]);
+                    commentsElement.textContent = `View all ${currentComments + 1} comments`;
+                }
+                
+                // Clear input
+                commentInput.value = '';
+                
+                // Show success
+                const originalText = commentBtn.textContent;
+                commentBtn.textContent = 'Posted!';
+                setTimeout(() => {
+                    commentBtn.textContent = originalText;
+                }, 1500);
+                
+                console.log('Comment posted');
+                
+            } catch (error) {
+                console.error('Error posting comment:', error);
+                alert('Error posting comment. Please try again.');
+            }
+        }
+
+        // Handle follow functionality
+        async function handleFollow(followBtn) {
+            const user = auth.currentUser;
+            if (!user) {
+                showAuthModal();
+                return;
+            }
+            
+            const username = followBtn.closest('.suggestion').querySelector('.suggestion-username').textContent;
+            
+            if (followBtn.textContent === 'Follow') {
+                followBtn.textContent = 'Following';
+                followBtn.style.color = '#262626';
+                console.log(`Started following ${username}`);
+            } else {
+                followBtn.textContent = 'Follow';
+                followBtn.style.color = '#E1306C';
+                console.log(`Unfollowed ${username}`);
+            }
+        }
+
+        // Allow Enter key for comments
+        document.addEventListener('keypress', (e) => {
+            if (e.target.classList.contains('comment-input') && e.key === 'Enter') {
+                const postId = e.target.dataset.postId;
+                handleComment(postId);
+            }
+        });
+
+        // Initialize the app
+        initApp();
+        console.log('Instagram Clone with Firebase initialized');
+
     </script>
 </body>
-  </html>
+</html>
