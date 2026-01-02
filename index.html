@@ -1,51 +1,799 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>InstaMock</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InstaConnect - Share Your Moments</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #E1306C;
+            --secondary-color: #405DE6;
+            --background-light: #FAFAFA;
+            --background-white: #FFFFFF;
+            --border-color: #DBDBDB;
+            --text-dark: #262626;
+            --text-light: #8E8E8E;
+            --text-gray: #737373;
+            --shadow-light: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--background-white);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .logo {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .search-box {
+            position: relative;
+            width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 8px 15px 8px 35px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--background-light);
+            font-size: 0.9rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-icons a {
+            font-size: 1.4rem;
+            color: var(--text-dark);
+            transition: color 0.3s;
+        }
+
+        .nav-icons a:hover {
+            color: var(--primary-color);
+        }
+
+        .user-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            gap: 30px;
+            padding: 30px 0;
+        }
+
+        /* Stories Section */
+        .stories-container {
+            background-color: var(--background-white);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+
+        .stories-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: var(--text-gray);
+        }
+
+        .stories {
+            display: flex;
+            gap: 20px;
+        }
+
+        .story {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 70px;
+            cursor: pointer;
+        }
+
+        .story-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            padding: 2px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            margin-bottom: 5px;
+        }
+
+        .story-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+        }
+
+        .story-username {
+            font-size: 0.75rem;
+            color: var(--text-dark);
+            max-width: 70px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Posts Section */
+        .posts-container {
+            flex: 1;
+        }
+
+        .post {
+            background-color: var(--background-white);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .post-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .post-user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .post-user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .post-username {
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .post-location {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .post-options {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+        .post-image {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+        }
+
+        .post-actions-left {
+            display: flex;
+            gap: 15px;
+        }
+
+        .post-action {
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .post-action:hover {
+            color: var(--primary-color);
+        }
+
+        .post-likes {
+            padding: 0 15px 10px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .post-caption {
+            padding: 0 15px 10px;
+            font-size: 0.9rem;
+        }
+
+        .post-caption-username {
+            font-weight: 500;
+            margin-right: 5px;
+        }
+
+        .post-comments {
+            padding: 0 15px 10px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .post-time {
+            padding: 0 15px 15px;
+            font-size: 0.75rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+        }
+
+        .add-comment {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .add-comment input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 0.9rem;
+        }
+
+        .add-comment button {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-weight: 500;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+
+        .add-comment button:hover {
+            opacity: 1;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 320px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .user-profile-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-profile-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-profile-username {
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .user-profile-name {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .suggestions {
+            background-color: var(--background-white);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .suggestions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .suggestions-title {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-gray);
+        }
+
+        .suggestions-see-all {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .suggestion {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .suggestion:last-child {
+            margin-bottom: 0;
+        }
+
+        .suggestion-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .suggestion-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .suggestion-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .suggestion-username {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .suggestion-desc {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .suggestion-follow {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--primary-color);
+            cursor: pointer;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .footer-link {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        .copyright {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .sidebar {
+                display: none;
+            }
+            
+            .search-box {
+                width: 200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .search-box {
+                display: none;
+            }
+            
+            .post-image {
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header-container {
+                padding: 10px 15px;
+            }
+            
+            .main-content {
+                padding: 15px 0;
+            }
+            
+            .post-image {
+                height: 350px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo">InstaConnect</a>
+            
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search">
+            </div>
+            
+            <div class="nav-icons">
+                <a href="#"><i class="fas fa-home"></i></a>
+                <a href="#"><i class="fas fa-paper-plane"></i></a>
+                <a href="#"><i class="fas fa-compass"></i></a>
+                <a href="#"><i class="fas fa-heart"></i></a>
+                <a href="#"><img src="https://images.unsplash.com/photo-1494790108755-2616c113a1c1?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User" class="user-avatar"></a>
+            </div>
+        </div>
+    </header>
 
-<header class="topbar">
-  <h1>InstaMock</h1>
-</header>
+    <!-- Main Content -->
+    <div class="container main-content">
+        <!-- Posts Section -->
+        <div class="posts-container">
+            <!-- Stories -->
+            <div class="stories-container">
+                <div class="stories-title">STORIES</div>
+                <div class="stories">
+                    <div class="story">
+                        <div class="story-avatar">
+                            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User">
+                        </div>
+                        <div class="story-username">johndoe</div>
+                    </div>
+                    <div class="story">
+                        <div class="story-avatar">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User">
+                        </div>
+                        <div class="story-username">janedoe</div>
+                    </div>
+                    <div class="story">
+                        <div class="story-avatar">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User">
+                        </div>
+                        <div class="story-username">mike_w</div>
+                    </div>
+                    <div class="story">
+                        <div class="story-avatar">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User">
+                        </div>
+                        <div class="story-username">amanda_s</div>
+                    </div>
+                    <div class="story">
+                        <div class="story-avatar">
+                            <img src="https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User">
+                        </div>
+                        <div class="story-username">robert_j</div>
+                    </div>
+                </div>
+            </div>
 
-<!-- POST 1 : IMAGE -->
-<div class="post">
-  <div class="post-header">
-    <span class="username">fake_user_01</span>
-  </div>
+            <!-- Post 1 -->
+            <div class="post">
+                <div class="post-header">
+                    <div class="post-user">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-username">johndoe</div>
+                            <div class="post-location">New York, USA</div>
+                        </div>
+                    </div>
+                    <div class="post-options">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </div>
+                </div>
+                
+                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80" alt="Post Image" class="post-image">
+                
+                <div class="post-actions">
+                    <div class="post-actions-left">
+                        <div class="post-action"><i class="far fa-heart"></i></div>
+                        <div class="post-action"><i class="far fa-comment"></i></div>
+                        <div class="post-action"><i class="far fa-paper-plane"></i></div>
+                    </div>
+                    <div class="post-action"><i class="far fa-bookmark"></i></div>
+                </div>
+                
+                <div class="post-likes">2,543 likes</div>
+                
+                <div class="post-caption">
+                    <span class="post-caption-username">johndoe</span>
+                    Beautiful sunset at the lake! #nature #sunset #photography
+                </div>
+                
+                <div class="post-comments">View all 124 comments</div>
+                
+                <div class="post-time">2 hours ago</div>
+                
+                <div class="add-comment">
+                    <input type="text" placeholder="Add a comment...">
+                    <button>Post</button>
+                </div>
+            </div>
 
-  <img src="images/post1.jpg" class="post-media">
+            <!-- Post 2 -->
+            <div class="post">
+                <div class="post-header">
+                    <div class="post-user">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-username">janedoe</div>
+                            <div class="post-location">Paris, France</div>
+                        </div>
+                    </div>
+                    <div class="post-options">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </div>
+                </div>
+                
+                <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80" alt="Post Image" class="post-image">
+                
+                <div class="post-actions">
+                    <div class="post-actions-left">
+                        <div class="post-action"><i class="far fa-heart"></i></div>
+                        <div class="post-action"><i class="far fa-comment"></i></div>
+                        <div class="post-action"><i class="far fa-paper-plane"></i></div>
+                    </div>
+                    <div class="post-action"><i class="far fa-bookmark"></i></div>
+                </div>
+                
+                <div class="post-likes">3,421 likes</div>
+                
+                <div class="post-caption">
+                    <span class="post-caption-username">janedoe</span>
+                    Mountain adventures! ⛰️ #hiking #mountains #outdoors
+                </div>
+                
+                <div class="post-comments">View all 89 comments</div>
+                
+                <div class="post-time">5 hours ago</div>
+                
+                <div class="add-comment">
+                    <input type="text" placeholder="Add a comment...">
+                    <button>Post</button>
+                </div>
+            </div>
+        </div>
 
-  <div class="actions">
-    ❤️ 💬 📤 🔖
-  </div>
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- User Profile -->
+            <div class="user-profile">
+                <img src="https://images.unsplash.com/photo-1494790108755-2616c113a1c1?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User" class="user-profile-avatar">
+                <div class="user-profile-info">
+                    <div class="user-profile-username">yourusername</div>
+                    <div class="user-profile-name">Alex Johnson</div>
+                </div>
+            </div>
 
-  <p class="likes">124 likes</p>
-  <p class="caption"><b>demo_creator</b> This is a demo image post</p>
-</div>
+            <!-- Suggestions -->
+            <div class="suggestions">
+                <div class="suggestions-header">
+                    <div class="suggestions-title">Suggestions For You</div>
+                    <a href="#" class="suggestions-see-all">See All</a>
+                </div>
+                
+                <div class="suggestion">
+                    <div class="suggestion-user">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User" class="suggestion-avatar">
+                        <div class="suggestion-info">
+                            <div class="suggestion-username">mike_w</div>
+                            <div class="suggestion-desc">Followed by johndoe + 2 more</div>
+                        </div>
+                    </div>
+                    <div class="suggestion-follow">Follow</div>
+                </div>
+                
+                <div class="suggestion">
+                    <div class="suggestion-user">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User" class="suggestion-avatar">
+                        <div class="suggestion-info">
+                            <div class="suggestion-username">amanda_s</div>
+                            <div class="suggestion-desc">New to InstaConnect</div>
+                        </div>
+                    </div>
+                    <div class="suggestion-follow">Follow</div>
+                </div>
+                
+                <div class="suggestion">
+                    <div class="suggestion-user">
+                        <img src="https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User" class="suggestion-avatar">
+                        <div class="suggestion-info">
+                            <div class="suggestion-username">robert_j</div>
+                            <div class="suggestion-desc">Followed by janedoe</div>
+                        </div>
+                    </div>
+                    <div class="suggestion-follow">Follow</div>
+                </div>
+                
+                <div class="suggestion">
+                    <div class="suggestion-user">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="User" class="suggestion-avatar">
+                        <div class="suggestion-info">
+                            <div class="suggestion-username">sarah_m</div>
+                            <div class="suggestion-desc">Popular photographer</div>
+                        </div>
+                    </div>
+                    <div class="suggestion-follow">Follow</div>
+                </div>
+            </div>
 
-<!-- POST 2 : VIDEO -->
-<div class="post">
-  <div class="post-header">
-    <span class="username">fake_user_02</span>
-  </div>
+            <!-- Footer Links -->
+            <div class="footer-links">
+                <a href="#" class="footer-link">About</a>
+                <a href="#" class="footer-link">Help</a>
+                <a href="#" class="footer-link">Press</a>
+                <a href="#" class="footer-link">API</a>
+                <a href="#" class="footer-link">Jobs</a>
+                <a href="#" class="footer-link">Privacy</a>
+                <a href="#" class="footer-link">Terms</a>
+                <a href="#" class="footer-link">Locations</a>
+                <a href="#" class="footer-link">Language</a>
+            </div>
+            
+            <div class="copyright">
+                © 2023 INSTACONNECT
+            </div>
+        </div>
+    </div>
 
-  <video class="post-media" controls>
-    <source src="videos/reel1.mp4" type="video/mp4">
-    Your browser does not support video.
-  </video>
+    <script>
+        // Like functionality
+        document.querySelectorAll('.post-action .fa-heart').forEach(heart => {
+            heart.addEventListener('click', function() {
+                if (this.classList.contains('far')) {
+                    this.classList.remove('far');
+                    this.classList.add('fas');
+                    this.style.color = '#E1306C';
+                    
+                    // Update like count
+                    const likesElement = this.closest('.post').querySelector('.post-likes');
+                    const currentLikes = parseInt(likesElement.textContent.replace(/,/g, ''));
+                    likesElement.textContent = (currentLikes + 1).toLocaleString() + ' likes';
+                } else {
+                    this.classList.remove('fas');
+                    this.classList.add('far');
+                    this.style.color = '';
+                    
+                    // Update like count
+                    const likesElement = this.closest('.post').querySelector('.post-likes');
+                    const currentLikes = parseInt(likesElement.textContent.replace(/,/g, ''));
+                    likesElement.textContent = (currentLikes - 1).toLocaleString() + ' likes';
+                }
+            });
+        });
 
-  <div class="actions">
-    ❤️ 💬 📤 🔖
-  </div>
+        // Bookmark functionality
+        document.querySelectorAll('.post-action .fa-bookmark').forEach(bookmark => {
+            bookmark.addEventListener('click', function() {
+                if (this.classList.contains('far')) {
+                    this.classList.remove('far');
+                    this.classList.add('fas');
+                } else {
+                    this.classList.remove('fas');
+                    this.classList.add('far');
+                }
+            });
+        });
 
-  <p class="likes">342 likes</p>
-  <p class="caption"><b>demo_creator</b> This is a demo video post</p>
-</div>
+        // Follow button functionality
+        document.querySelectorAll('.suggestion-follow').forEach(button => {
+            button.addEventListener('click', function() {
+                if (this.textContent === 'Follow') {
+                    this.textContent = 'Following';
+                    this.style.color = '#262626';
+                } else {
+                    this.textContent = 'Follow';
+                    this.style.color = '#E1306C';
+                }
+            });
+        });
 
+        // Comment posting
+        document.querySelectorAll('.add-comment button').forEach(button => {
+            button.addEventListener('click', function() {
+                const commentInput = this.previousElementSibling;
+                const commentText = commentInput.value.trim();
+                
+                if (commentText) {
+                    const post = this.closest('.post');
+                    const commentsElement = post.querySelector('.post-comments');
+                    
+                    // Update comment count
+                    const currentCommentsText = commentsElement.textContent;
+                    const commentCount = parseInt(currentCommentsText.match(/\d+/)[0]);
+                    commentsElement.textContent = `View all ${commentCount + 1} comments`;
+                    
+                    // Clear input
+                    commentInput.value = '';
+                    
+                    // Show success message
+                    const originalText = this.textContent;
+                    this.textContent = 'Posted!';
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                    }, 1500);
+                }
+            });
+            
+            // Allow pressing Enter to post comment
+            const commentInput = button.previousElementSibling;
+            commentInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    button.click();
+                }
+            });
+        });
+    </script>
 </body>
-</html>
+  </html>
