@@ -1745,982 +1745,1103 @@
             </div>
         </div>
     </div>
-
+     
     <script>
-        // Supabase Configuration
-        const SUPABASE_URL = 'https://zxsszdqcwwgshcsesvnm.supabase.co'; // Replace with your Supabase URL
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4c3N6ZHFjd3dnc2hjc2Vzdm5tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc0MDcxMTAsImV4cCI6MjA4Mjk4MzExMH0.tBziD4MZ0ofSydlfn1IE10rw5FdW4IBkpG98lg4zie0';// Replace with your Supabase anon key
-
-        // Initialize Supabase client
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        // DOM Elements
-        const authModal = document.getElementById('authModal');
-        const googleSignInBtn = document.getElementById('googleSignInBtn');
-        const usernameModal = document.getElementById('usernameModal');
-        const usernameInput = document.getElementById('usernameInput');
-        const usernameCheck = document.getElementById('usernameCheck');
-        const saveUsernameBtn = document.getElementById('saveUsernameBtn');
-        const storyUploadModal = document.getElementById('storyUploadModal');
-        const closeUploadBtn = document.getElementById('closeUploadBtn');
-        const uploadArea = document.getElementById('uploadArea');
-        const uploadPreview = document.getElementById('uploadPreview');
-        const previewImage = document.getElementById('previewImage');
-        const previewVideo = document.getElementById('previewVideo');
-        const removePreviewBtn = document.getElementById('removePreviewBtn');
-        const storyCaptionInput = document.getElementById('storyCaptionInput');
-        const uploadStoryBtn = document.getElementById('uploadStoryBtn');
-        const storyViewerModal = document.getElementById('storyViewerModal');
-        const storyProgressContainer = document.getElementById('storyProgressContainer');
-        const storyViewerAvatar = document.getElementById('storyViewerAvatar');
-        const storyViewerUsername = document.getElementById('storyViewerUsername');
-        const storyViewerTime = document.getElementById('storyViewerTime');
-        const closeStoryViewerBtn = document.getElementById('closeStoryViewerBtn');
-        const prevStoryBtn = document.getElementById('prevStoryBtn');
-        const nextStoryBtn = document.getElementById('nextStoryBtn');
-        const storyImageView = document.getElementById('storyImageView');
-        const storyVideoView = document.getElementById('storyVideoView');
-        const storyCaptionContainer = document.getElementById('storyCaptionContainer');
-        const storyCaptionText = document.getElementById('storyCaptionText');
-        const storyReplyInput = document.getElementById('storyReplyInput');
-        const createPostModal = document.getElementById('createPostModal');
-        const closePostBtn = document.getElementById('closePostBtn');
-        const postUploadArea = document.getElementById('postUploadArea');
-        const selectFilesBtn = document.getElementById('selectFilesBtn');
-        const postPreview = document.getElementById('postPreview');
-        const postPreviewImage = document.getElementById('postPreviewImage');
-        const postPreviewVideo = document.getElementById('postPreviewVideo');
-        const prevMediaBtn = document.getElementById('prevMediaBtn');
-        const nextMediaBtn = document.getElementById('nextMediaBtn');
-        const removePostPreviewBtn = document.getElementById('removePostPreviewBtn');
-        const postDetails = document.getElementById('postDetails');
-        const postUserInfoSmall = document.getElementById('postUserInfoSmall');
-        const postUserAvatarSmall = document.getElementById('postUserAvatarSmall');
-        const postUsername = document.getElementById('postUsername');
-        const postCaptionTextarea = document.getElementById('postCaptionTextarea');
-        const postLocationInput = document.getElementById('postLocationInput');
-        const sharePostBtn = document.getElementById('sharePostBtn');
-        const navIcons = document.getElementById('navIcons');
-        const postsContainer = document.getElementById('postsContainer');
-        const exploreContainer = document.getElementById('exploreContainer');
-        const exploreGrid = document.getElementById('exploreGrid');
-        const messagesContainer = document.getElementById('messagesContainer');
-        const newMessageBtn = document.getElementById('newMessageBtn');
-        const conversationsList = document.getElementById('conversationsList');
-        const chatContainer = document.getElementById('chatContainer');
-        const chatHeader = document.getElementById('chatHeader');
-        const chatMessages = document.getElementById('chatMessages');
-        const messageInput = document.getElementById('messageInput');
-        const sendMessageBtn = document.getElementById('sendMessageBtn');
-        const sidebar = document.getElementById('sidebar');
-        const sidebarUserProfile = document.getElementById('sidebarUserProfile');
-        const sidebarUserAvatar = document.getElementById('sidebarUserAvatar');
-        const sidebarUsername = document.getElementById('sidebarUsername');
-        const sidebarFullName = document.getElementById('sidebarFullName');
-        const suggestionsContainer = document.getElementById('suggestionsContainer');
-        const suggestionsList = document.getElementById('suggestionsList');
-        const searchInput = document.getElementById('searchInput');
-
-        // App State
-        let currentUser = null;
-        let currentUserData = null;
-        let selectedStoryFile = null;
-        let storyFileType = null;
-        let allStories = [];
-        let currentStoryIndex = 0;
-        let currentUserStoryIndex = 0;
-        let storyProgressInterval = null;
-        const storyDuration = 10000;
-        let selectedPostFiles = [];
-        let currentPostFileIndex = 0;
-        let currentActivePage = 'home';
-        let currentChatUser = null;
-        let conversations = [];
-
-        // Initialize App
-        function initApp() {
-            // Check authentication state
-            checkAuthState();
-            
-            // Set up event listeners
-            setupEventListeners();
+    // ============================
+    // SUPABASE CONFIGURATION
+    // ============================
+    // ⚠️ IMPORTANT: Replace these with YOUR actual values
+    const SUPABASE_URL = 'https://zxsszdqcwwgshcsesvnm.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4c3N6ZHFjd3dnc2hjc2Vzdm5tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc0MDcxMTAsImV4cCI6MjA4Mjk4MzExMH0.tBziD4MZ0ofSydlfn1IE10rw5FdW4IBkpG98lg4zie0';
+    const GITHUB_PAGES_URL = 'https://uioemoe.github.io/uioemoe/';
+    
+    // Initialize Supabase client with CORRECT settings for GitHub Pages
+    const supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY,
+        {
+            // CRITICAL: PKCE flow is REQUIRED for GitHub Pages
+            auth: {
+                autoRefreshToken: false,
+                persistSession: true,
+                detectSessionInUrl: true,
+                flowType: 'pkce', // ← MUST be 'pkce' for static sites
+                storage: window.localStorage,
+                debug: true // Helps with debugging
+            },
+            // Global headers for all requests
+            global: {
+                headers: {
+                    'apikey': SUPABASE_ANON_KEY,
+                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                }
+            }
         }
+    );
 
+    // DOM Elements
+    const authModal = document.getElementById('authModal');
+    const googleSignInBtn = document.getElementById('googleSignInBtn');
+    const usernameModal = document.getElementById('usernameModal');
+    const usernameInput = document.getElementById('usernameInput');
+    const usernameCheck = document.getElementById('usernameCheck');
+    const saveUsernameBtn = document.getElementById('saveUsernameBtn');
+    const storyUploadModal = document.getElementById('storyUploadModal');
+    const closeUploadBtn = document.getElementById('closeUploadBtn');
+    const uploadArea = document.getElementById('uploadArea');
+    const uploadPreview = document.getElementById('uploadPreview');
+    const previewImage = document.getElementById('previewImage');
+    const previewVideo = document.getElementById('previewVideo');
+    const removePreviewBtn = document.getElementById('removePreviewBtn');
+    const storyCaptionInput = document.getElementById('storyCaptionInput');
+    const uploadStoryBtn = document.getElementById('uploadStoryBtn');
+    const storyViewerModal = document.getElementById('storyViewerModal');
+    const storyProgressContainer = document.getElementById('storyProgressContainer');
+    const storyViewerAvatar = document.getElementById('storyViewerAvatar');
+    const storyViewerUsername = document.getElementById('storyViewerUsername');
+    const storyViewerTime = document.getElementById('storyViewerTime');
+    const closeStoryViewerBtn = document.getElementById('closeStoryViewerBtn');
+    const prevStoryBtn = document.getElementById('prevStoryBtn');
+    const nextStoryBtn = document.getElementById('nextStoryBtn');
+    const storyImageView = document.getElementById('storyImageView');
+    const storyVideoView = document.getElementById('storyVideoView');
+    const storyCaptionContainer = document.getElementById('storyCaptionContainer');
+    const storyCaptionText = document.getElementById('storyCaptionText');
+    const storyReplyInput = document.getElementById('storyReplyInput');
+    const createPostModal = document.getElementById('createPostModal');
+    const closePostBtn = document.getElementById('closePostBtn');
+    const postUploadArea = document.getElementById('postUploadArea');
+    const selectFilesBtn = document.getElementById('selectFilesBtn');
+    const postPreview = document.getElementById('postPreview');
+    const postPreviewImage = document.getElementById('postPreviewImage');
+    const postPreviewVideo = document.getElementById('postPreviewVideo');
+    const prevMediaBtn = document.getElementById('prevMediaBtn');
+    const nextMediaBtn = document.getElementById('nextMediaBtn');
+    const removePostPreviewBtn = document.getElementById('removePostPreviewBtn');
+    const postDetails = document.getElementById('postDetails');
+    const postUserInfoSmall = document.getElementById('postUserInfoSmall');
+    const postUserAvatarSmall = document.getElementById('postUserAvatarSmall');
+    const postUsername = document.getElementById('postUsername');
+    const postCaptionTextarea = document.getElementById('postCaptionTextarea');
+    const postLocationInput = document.getElementById('postLocationInput');
+    const sharePostBtn = document.getElementById('sharePostBtn');
+    const navIcons = document.getElementById('navIcons');
+    const postsContainer = document.getElementById('postsContainer');
+    const exploreContainer = document.getElementById('exploreContainer');
+    const exploreGrid = document.getElementById('exploreGrid');
+    const messagesContainer = document.getElementById('messagesContainer');
+    const newMessageBtn = document.getElementById('newMessageBtn');
+    const conversationsList = document.getElementById('conversationsList');
+    const chatContainer = document.getElementById('chatContainer');
+    const chatHeader = document.getElementById('chatHeader');
+    const chatMessages = document.getElementById('chatMessages');
+    const messageInput = document.getElementById('messageInput');
+    const sendMessageBtn = document.getElementById('sendMessageBtn');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarUserProfile = document.getElementById('sidebarUserProfile');
+    const sidebarUserAvatar = document.getElementById('sidebarUserAvatar');
+    const sidebarUsername = document.getElementById('sidebarUsername');
+    const sidebarFullName = document.getElementById('sidebarFullName');
+    const suggestionsContainer = document.getElementById('suggestionsContainer');
+    const suggestionsList = document.getElementById('suggestionsList');
+    const searchInput = document.getElementById('searchInput');
+
+    // App State
+    let currentUser = null;
+    let currentUserData = null;
+    let selectedStoryFile = null;
+    let storyFileType = null;
+    let allStories = [];
+    let currentStoryIndex = 0;
+    let currentUserStoryIndex = 0;
+    let storyProgressInterval = null;
+    const storyDuration = 10000;
+    let selectedPostFiles = [];
+    let currentPostFileIndex = 0;
+    let currentActivePage = 'home';
+    let currentChatUser = null;
+    let conversations = [];
+
+    // ============================
+    // CONFIGURATION VALIDATION
+    // ============================
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('🔧 Checking configuration...');
+        
+        // Validate Supabase URL
+        if (!SUPABASE_URL || SUPABASE_URL.includes('your-project')) {
+            console.error('❌ ERROR: Supabase URL not configured!');
+            alert('🚨 SUPABASE CONFIGURATION ERROR\n\nPlease update the Supabase URL in the JavaScript code.');
+            return;
+        }
+        
+        // Validate Supabase Key
+        if (!SUPABASE_ANON_KEY || SUPABASE_ANON_KEY.includes('your-anon-key')) {
+            console.error('❌ ERROR: Supabase anon key not configured!');
+            alert('🚨 SUPABASE CONFIGURATION ERROR\n\nPlease update the Supabase anon key in the JavaScript code.');
+            return;
+        }
+        
+        console.log('✅ Configuration valid');
+        console.log('📋 Supabase URL:', SUPABASE_URL);
+        console.log('📋 GitHub Pages URL:', GITHUB_PAGES_URL);
+        
+        // Initialize the app
+        initApp();
+    });
+
+    // ============================
+    // INITIALIZATION
+    // ============================
+    function initApp() {
+        console.log('🚀 Initializing InstaConnect...');
+        
+        // Show auth modal immediately
+        authModal.style.display = 'flex';
+        
         // Check authentication state
-        async function checkAuthState() {
-            const { data: { session } } = await supabase.auth.getSession();
+        checkAuthState();
+        
+        // Set up event listeners
+        setupEventListeners();
+        
+        // Check storage policies
+        ensureStoragePolicies();
+        
+        // Add debug info to page
+        addDebugInfo();
+    }
+
+    // Check authentication state
+    async function checkAuthState() {
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (session) {
+            currentUser = session.user;
+            console.log('✅ User session found:', session.user.email);
+            await handleUserSignedIn(session.user);
+        } else {
+            console.log('ℹ️ No user session found');
+            handleUserSignedOut();
+        }
+        
+        // Listen for auth changes
+        supabase.auth.onAuthStateChange(async (event, session) => {
+            console.log('🔄 Auth state changed:', event);
             
-            if (session) {
+            if (event === 'SIGNED_IN' && session) {
                 currentUser = session.user;
+                console.log('✅ User signed in:', session.user.email);
                 await handleUserSignedIn(session.user);
-            } else {
+            } else if (event === 'SIGNED_OUT') {
+                console.log('ℹ️ User signed out');
                 handleUserSignedOut();
             }
-            
-            // Listen for auth changes
-            supabase.auth.onAuthStateChange(async (event, session) => {
-                if (event === 'SIGNED_IN' && session) {
-                    currentUser = session.user;
-                    await handleUserSignedIn(session.user);
-                } else if (event === 'SIGNED_OUT') {
-                    handleUserSignedOut();
-                }
-            });
-        }
+        });
+    }
 
-        // Set up all event listeners
-        function setupEventListeners() {
-            // Auth
-            googleSignInBtn.addEventListener('click', handleGoogleSignIn);
+    // Check and create storage policies if needed
+    async function ensureStoragePolicies() {
+        console.log('🔍 Checking storage policies...');
+        
+        try {
+            // Check if we can list files (tests if bucket has proper policies)
+            const { data, error } = await supabase.storage
+                .from('media')
+                .list('', { limit: 1 });
             
-            // Username
-            usernameInput.addEventListener('input', checkUsernameAvailability);
-            saveUsernameBtn.addEventListener('click', saveUsername);
-            
-            // Story upload
-            closeUploadBtn.addEventListener('click', () => hideModal(storyUploadModal));
-            removePreviewBtn.addEventListener('click', removeStoryPreview);
-            uploadStoryBtn.addEventListener('click', uploadStory);
-            
-            // Story viewer
-            closeStoryViewerBtn.addEventListener('click', closeStoryViewer);
-            prevStoryBtn.addEventListener('click', showPreviousStory);
-            nextStoryBtn.addEventListener('click', showNextStory);
-            storyReplyInput.addEventListener('keypress', handleStoryReply);
-            
-            // Post creation
-            closePostBtn.addEventListener('click', () => hideModal(createPostModal));
-            selectFilesBtn.addEventListener('click', () => {
-                const fileInput = document.createElement('input');
-                fileInput.type = 'file';
-                fileInput.accept = 'image/*,video/*';
-                fileInput.multiple = true;
-                fileInput.addEventListener('change', handlePostFileSelect);
-                fileInput.click();
-            });
-            prevMediaBtn.addEventListener('click', () => showPostMedia(currentPostFileIndex - 1));
-            nextMediaBtn.addEventListener('click', () => showPostMedia(currentPostFileIndex + 1));
-            removePostPreviewBtn.addEventListener('click', removePostPreview);
-            sharePostBtn.addEventListener('click', uploadPost);
-            
-            // Messages
-            newMessageBtn.addEventListener('click', startNewMessage);
-            sendMessageBtn.addEventListener('click', sendMessage);
-            messageInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') sendMessage();
-            });
-            
-            // Story upload area
-            setupUploadArea(uploadArea, handleStoryFileSelect);
-            setupUploadArea(postUploadArea, handlePostFileSelect);
-            
-            // Search
-            searchInput.addEventListener('input', handleSearch);
-        }
-
-        // Setup upload area with drag and drop
-        function setupUploadArea(area, fileHandler) {
-            area.addEventListener('click', () => {
-                const fileInput = document.createElement('input');
-                fileInput.type = 'file';
-                fileInput.accept = 'image/*,video/*';
-                if (area === postUploadArea) {
-                    fileInput.multiple = true;
-                }
-                fileInput.addEventListener('change', fileHandler);
-                fileInput.click();
-            });
-
-            area.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                area.style.borderColor = 'var(--primary-color)';
-                area.style.backgroundColor = 'rgba(225, 48, 108, 0.05)';
-            });
-
-            area.addEventListener('dragleave', () => {
-                area.style.borderColor = 'var(--border-color)';
-                area.style.backgroundColor = 'transparent';
-            });
-
-            area.addEventListener('drop', (e) => {
-                e.preventDefault();
-                area.style.borderColor = 'var(--border-color)';
-                area.style.backgroundColor = 'transparent';
-                
-                if (e.dataTransfer.files.length > 0) {
-                    const event = { target: { files: e.dataTransfer.files } };
-                    fileHandler(event);
-                }
-            });
-        }
-
-        // Handle user signed in
-        async function handleUserSignedIn(user) {
-            console.log('User signed in:', user);
-            
-            // Get or create user profile
-            const { data: userProfile, error } = await supabase
-                .from('users')
-                .select('*')
-                .eq('uid', user.id)
-                .single();
-            
-            if (error && error.code === 'PGRST116') { // No user found
-                await createUserProfile(user);
-                showUsernameModal();
-            } else if (userProfile) {
-                currentUserData = userProfile;
-                if (currentUserData.username) {
-                    showAppContent();
-                } else {
-                    showUsernameModal();
-                }
-            }
-        }
-
-        // Create user profile
-        async function createUserProfile(user) {
-            try {
-                const userData = {
-                    uid: user.id,
-                    email: user.email,
-                    displayName: user.user_metadata?.full_name || user.email?.split('@')[0] || 'User',
-                    photoURL: user.user_metadata?.avatar_url || getDefaultAvatar(),
-                    created_at: new Date().toISOString(),
-                    updated_at: new Date().toISOString(),
-                    followers: 0,
-                    following: 0,
-                    posts: 0,
-                    bio: '',
-                    website: ''
-                };
-                
-                const { data, error } = await supabase
-                    .from('users')
-                    .insert([userData])
-                    .select()
-                    .single();
-                
-                if (error) throw error;
-                
-                currentUserData = data;
-                console.log('User profile created');
-            } catch (error) {
-                console.error('Error creating user profile:', error);
-            }
-        }
-
-        // Show username modal
-        function showUsernameModal() {
-            authModal.style.display = 'none';
-            usernameModal.style.display = 'flex';
-            usernameInput.focus();
-        }
-
-        // Check username availability
-        async function checkUsernameAvailability() {
-            const username = usernameInput.value.trim().toLowerCase();
-            
-            if (username.length < 3) {
-                usernameCheck.textContent = 'Username must be at least 3 characters';
-                usernameCheck.className = 'username-check taken';
-                saveUsernameBtn.disabled = true;
-                return;
+            if (error && error.message.includes('policy')) {
+                console.warn('⚠️ Storage policies may need configuration');
+                console.log('ℹ️ Run this SQL in Supabase SQL Editor:');
+                console.log(`
+                    -- Enable public access
+                    CREATE POLICY "Public Access"
+                    ON storage.objects FOR SELECT
+                    USING (bucket_id = 'media');
+                    
+                    -- Enable authenticated uploads
+                    CREATE POLICY "Authenticated users can upload"
+                    ON storage.objects FOR INSERT
+                    TO authenticated
+                    WITH CHECK (bucket_id = 'media');
+                `);
+            } else if (!error) {
+                console.log('✅ Storage policies are configured correctly');
             }
             
-            if (!/^[a-z0-9_.]+$/.test(username)) {
-                usernameCheck.textContent = 'Username can only contain letters, numbers, underscores, and periods';
-                usernameCheck.className = 'username-check taken';
-                saveUsernameBtn.disabled = true;
-                return;
-            }
-            
-            // Check if username exists
-            const { data, error } = await supabase
-                .from('users')
-                .select('username')
-                .eq('username', username)
-                .single();
-            
-            if (error && error.code === 'PGRST116') {
-                usernameCheck.textContent = '✓ Username is available';
-                usernameCheck.className = 'username-check available';
-                saveUsernameBtn.disabled = false;
-            } else if (data) {
-                usernameCheck.textContent = '✗ Username is already taken';
-                usernameCheck.className = 'username-check taken';
-                saveUsernameBtn.disabled = true;
-            }
+        } catch (error) {
+            console.error('❌ Error checking storage policies:', error);
         }
+    }
 
-        // Save username
-        async function saveUsername() {
-            const username = usernameInput.value.trim().toLowerCase();
-            
-            try {
-                const { error } = await supabase
-                    .from('users')
-                    .update({
-                        username: username,
-                        updated_at: new Date().toISOString()
-                    })
-                    .eq('uid', currentUser.id);
-                
-                if (error) throw error;
-                
-                currentUserData.username = username;
-                usernameModal.style.display = 'none';
-                showAppContent();
-                
-                console.log('Username saved:', username);
-            } catch (error) {
-                console.error('Error saving username:', error);
-                alert('Error saving username. Please try again.');
-            }
-        }
-
-        // Show main app content
-        function showAppContent() {
-            // Update navigation
-            updateNavigation();
-            
-            // Load initial content
-            loadHomeContent();
-        }
-
-        // Update navigation
-        function updateNavigation() {
-            navIcons.innerHTML = `
-                <a href="#" class="nav-icon home-btn ${currentActivePage === 'home' ? 'active' : ''}" title="Home">
-                    <i class="fas fa-home"></i>
-                </a>
-                <a href="#" class="nav-icon explore-btn ${currentActivePage === 'explore' ? 'active' : ''}" title="Explore">
-                    <i class="fas fa-search"></i>
-                </a>
-                <button class="create-story-btn" title="Create Story" id="headerCreateStoryBtn">
-                    <i class="fas fa-plus"></i>
-                </button>
-                <button class="create-post-btn" title="Create Post" id="headerCreatePostBtn">
-                    <i class="fas fa-plus-square"></i>
-                </button>
-                <a href="#" class="nav-icon messages-btn ${currentActivePage === 'messages' ? 'active' : ''}" title="Messages">
-                    <i class="fas fa-paper-plane"></i>
-                    <span class="notification-badge" id="messageBadge" style="display: none;">3</span>
-                </a>
-                <a href="#" class="nav-icon notifications-btn" title="Notifications">
-                    <i class="fas fa-heart"></i>
-                    <span class="notification-badge" id="notificationBadge" style="display: none;">5</span>
-                </a>
-                <img src="${currentUserData.photoURL}" 
-                     alt="User" 
-                     class="user-avatar" 
-                     id="headerUserAvatar"
-                     title="Profile">
-                <button class="sign-out-btn" id="signOutBtn">Sign Out</button>
+    // Add debug info to page
+    function addDebugInfo() {
+        // Only show in development/localhost
+        if (window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1')) {
+            const debugDiv = document.createElement('div');
+            debugDiv.style.position = 'fixed';
+            debugDiv.style.bottom = '10px';
+            debugDiv.style.right = '10px';
+            debugDiv.style.background = 'rgba(0,0,0,0.7)';
+            debugDiv.style.color = 'white';
+            debugDiv.style.padding = '10px';
+            debugDiv.style.borderRadius = '5px';
+            debugDiv.style.fontSize = '12px';
+            debugDiv.style.zIndex = '9999';
+            debugDiv.innerHTML = `
+                <strong>Debug Info</strong><br>
+                Supabase: ${SUPABASE_URL ? '✅' : '❌'}<br>
+                GitHub: ${GITHUB_PAGES_URL}<br>
+                User: ${currentUser ? 'Logged in' : 'Not logged in'}<br>
+                <button onclick="testSupabaseConnection()" style="margin-top:5px; padding:2px 5px;">Test Connection</button>
+                <button onclick="location.reload()" style="margin-top:5px; padding:2px 5px;">Refresh</button>
             `;
+            document.body.appendChild(debugDiv);
+        }
+    }
+
+    // Test Supabase connection
+    async function testSupabaseConnection() {
+        console.log('🔌 Testing Supabase connection...');
+        
+        try {
+            // Test 1: Auth session
+            const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+            if (sessionError) {
+                console.error('❌ Auth test failed:', sessionError.message);
+            } else {
+                console.log('✅ Auth test passed');
+            }
             
-            // Add event listeners to new navigation elements
-            document.querySelector('.home-btn').addEventListener('click', (e) => {
-                e.preventDefault();
-                switchPage('home');
+            // Test 2: Database
+            const { data: dbData, error: dbError } = await supabase
+                .from('users')
+                .select('count')
+                .limit(1);
+            if (dbError) {
+                console.error('❌ Database test failed:', dbError.message);
+            } else {
+                console.log('✅ Database test passed');
+            }
+            
+            // Test 3: Storage
+            const { data: storageData, error: storageError } = await supabase.storage
+                .from('media')
+                .list('', { limit: 1 });
+            if (storageError) {
+                console.error('❌ Storage test failed:', storageError.message);
+            } else {
+                console.log('✅ Storage test passed');
+            }
+            
+        } catch (error) {
+            console.error('❌ Connection test error:', error);
+        }
+    }
+
+    // ============================
+    // EVENT LISTENERS
+    // ============================
+    function setupEventListeners() {
+        console.log('🔗 Setting up event listeners...');
+        
+        // Auth
+        googleSignInBtn.addEventListener('click', handleGoogleSignIn);
+        
+        // Username
+        usernameInput.addEventListener('input', checkUsernameAvailability);
+        saveUsernameBtn.addEventListener('click', saveUsername);
+        
+        // Story upload
+        closeUploadBtn.addEventListener('click', () => hideModal(storyUploadModal));
+        removePreviewBtn.addEventListener('click', removeStoryPreview);
+        uploadStoryBtn.addEventListener('click', uploadStory);
+        
+        // Story viewer
+        closeStoryViewerBtn.addEventListener('click', closeStoryViewer);
+        prevStoryBtn.addEventListener('click', showPreviousStory);
+        nextStoryBtn.addEventListener('click', showNextStory);
+        storyReplyInput.addEventListener('keypress', handleStoryReply);
+        
+        // Post creation
+        closePostBtn.addEventListener('click', () => hideModal(createPostModal));
+        selectFilesBtn.addEventListener('click', () => {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*,video/*';
+            fileInput.multiple = true;
+            fileInput.addEventListener('change', handlePostFileSelect);
+            fileInput.click();
+        });
+        prevMediaBtn.addEventListener('click', () => showPostMedia(currentPostFileIndex - 1));
+        nextMediaBtn.addEventListener('click', () => showPostMedia(currentPostFileIndex + 1));
+        removePostPreviewBtn.addEventListener('click', removePostPreview);
+        sharePostBtn.addEventListener('click', uploadPost);
+        
+        // Messages
+        newMessageBtn.addEventListener('click', startNewMessage);
+        sendMessageBtn.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+        
+        // Story upload area
+        setupUploadArea(uploadArea, handleStoryFileSelect);
+        setupUploadArea(postUploadArea, handlePostFileSelect);
+        
+        // Search
+        searchInput.addEventListener('input', handleSearch);
+        
+        console.log('✅ Event listeners set up');
+    }
+
+    // Setup upload area with drag and drop
+    function setupUploadArea(area, fileHandler) {
+        area.addEventListener('click', () => {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*,video/*';
+            if (area === postUploadArea) {
+                fileInput.multiple = true;
+            }
+            fileInput.addEventListener('change', fileHandler);
+            fileInput.click();
+        });
+
+        area.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            area.style.borderColor = 'var(--primary-color)';
+            area.style.backgroundColor = 'rgba(225, 48, 108, 0.05)';
+        });
+
+        area.addEventListener('dragleave', () => {
+            area.style.borderColor = 'var(--border-color)';
+            area.style.backgroundColor = 'transparent';
+        });
+
+        area.addEventListener('drop', (e) => {
+            e.preventDefault();
+            area.style.borderColor = 'var(--border-color)';
+            area.style.backgroundColor = 'transparent';
+            
+            if (e.dataTransfer.files.length > 0) {
+                const event = { target: { files: e.dataTransfer.files } };
+                fileHandler(event);
+            }
+        });
+    }
+
+    // ============================
+    // AUTHENTICATION FUNCTIONS
+    // ============================
+    // Handle Google sign in - UPDATED FOR GITHUB PAGES
+    async function handleGoogleSignIn() {
+        console.log('🔐 Starting Google OAuth...');
+        
+        try {
+            const { data, error } = await supabase.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    // CRITICAL: Must use your GitHub Pages URL
+                    redirectTo: GITHUB_PAGES_URL,
+                    queryParams: {
+                        access_type: 'offline',
+                        prompt: 'consent'
+                    },
+                    scopes: 'email profile'
+                }
             });
             
-            document.querySelector('.explore-btn').addEventListener('click', (e) => {
-                e.preventDefault();
-                switchPage('explore');
-            });
-            
-            document.querySelector('.messages-btn').addEventListener('click', (e) => {
-                e.preventDefault();
-                switchPage('messages');
-            });
-            
-            document.getElementById('headerCreateStoryBtn').addEventListener('click', showStoryUploadModal);
-            document.getElementById('headerCreatePostBtn').addEventListener('click', showCreatePostModal);
-            document.getElementById('signOutBtn').addEventListener('click', handleSignOut);
-            
-            // Update sidebar
-            updateSidebar();
-        }
-
-        // Switch between pages
-        function switchPage(page) {
-            currentActivePage = page;
-            
-            // Update active state in navigation
-            document.querySelectorAll('.nav-icon').forEach(icon => {
-                icon.classList.remove('active');
-            });
-            
-            if (page === 'home') {
-                document.querySelector('.home-btn').classList.add('active');
-                postsContainer.style.display = 'block';
-                exploreContainer.style.display = 'none';
-                messagesContainer.style.display = 'none';
-                sidebar.style.display = 'block';
-                loadHomeContent();
-            } else if (page === 'explore') {
-                document.querySelector('.explore-btn').classList.add('active');
-                postsContainer.style.display = 'none';
-                exploreContainer.style.display = 'block';
-                messagesContainer.style.display = 'none';
-                sidebar.style.display = 'block';
-                loadExploreContent();
-            } else if (page === 'messages') {
-                document.querySelector('.messages-btn').classList.add('active');
-                postsContainer.style.display = 'none';
-                exploreContainer.style.display = 'none';
-                messagesContainer.style.display = 'flex';
-                sidebar.style.display = 'none';
-                loadMessages();
-            }
-        }
-
-        // Update sidebar
-        function updateSidebar() {
-            sidebarUserProfile.style.display = 'flex';
-            sidebarUserAvatar.src = currentUserData.photoURL;
-            sidebarUsername.textContent = currentUserData.username;
-            sidebarFullName.textContent = currentUserData.displayName;
-            
-            suggestionsContainer.style.display = 'block';
-            loadSuggestions();
-        }
-
-        // Load home content
-        async function loadHomeContent() {
-            try {
-                postsContainer.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading posts...</div>';
-                
-                // Load stories
-                await loadStories();
-                
-                // Load posts
-                const { data: posts, error } = await supabase
-                    .from('posts')
-                    .select('*')
-                    .order('created_at', { ascending: false })
-                    .limit(20);
-                
-                if (error) throw error;
-                
-                if (!posts || posts.length === 0) {
-                    postsContainer.innerHTML = `
-                        <div class="stories-container" id="storiesContainer"></div>
-                        <div class="no-posts">
-                            <h3>No posts yet</h3>
-                            <p>Be the first to share a post!</p>
-                            <button class="create-post-btn" id="createFirstPostBtn">Create Post</button>
-                        </div>
-                    `;
-                    document.getElementById('createFirstPostBtn').addEventListener('click', showCreatePostModal);
-                } else {
-                    let postsHTML = '';
-                    posts.forEach(post => {
-                        postsHTML += createPostHTML(post);
-                    });
-                    
-                    const storiesContainer = document.getElementById('storiesContainer');
-                    if (storiesContainer) {
-                        postsContainer.innerHTML = storiesContainer.outerHTML + postsHTML;
-                    } else {
-                        postsContainer.innerHTML = postsHTML;
-                    }
-                    
-                    // Add event listeners to posts
-                    document.querySelectorAll('.like-btn').forEach(btn => {
-                        btn.addEventListener('click', handlePostLike);
-                    });
-                    
-                    document.querySelectorAll('.comment-btn').forEach(btn => {
-                        btn.addEventListener('click', handlePostComment);
-                    });
-                }
-                
-            } catch (error) {
-                console.error('Error loading home content:', error);
-                postsContainer.innerHTML = '<div class="error">Error loading content. Please try again.</div>';
-            }
-        }
-
-        // Load explore content
-        async function loadExploreContent() {
-            try {
-                exploreGrid.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading explore content...</div>';
-                
-                // Get random posts for explore page
-                const { data: posts, error } = await supabase
-                    .from('posts')
-                    .select('*')
-                    .order('created_at', { ascending: false })
-                    .limit(30);
-                
-                if (error) throw error;
-                
-                if (posts && posts.length > 0) {
-                    let exploreHTML = '';
-                    posts.forEach(post => {
-                        exploreHTML += `
-                            <div class="explore-item" data-post-id="${post.id}">
-                                <img src="${post.media_urls[0]}" alt="Post">
-                                <div class="explore-item-overlay">
-                                    <div class="explore-item-stats">
-                                        <div class="explore-stat">
-                                            <i class="fas fa-heart"></i>
-                                            <span>${post.likes_count || 0}</span>
-                                        </div>
-                                        <div class="explore-stat">
-                                            <i class="fas fa-comment"></i>
-                                            <span>${post.comments_count || 0}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    });
-                    
-                    exploreGrid.innerHTML = exploreHTML;
-                    
-                    // Add click event to explore items
-                    document.querySelectorAll('.explore-item').forEach(item => {
-                        item.addEventListener('click', () => {
-                            const postId = item.dataset.postId;
-                            alert(`Viewing post ${postId}`);
-                        });
-                    });
-                } else {
-                    exploreGrid.innerHTML = '<div class="no-content"><h3>No content to explore yet</h3></div>';
-                }
-                
-            } catch (error) {
-                console.error('Error loading explore content:', error);
-                exploreGrid.innerHTML = '<div class="error">Error loading explore content.</div>';
-            }
-        }
-
-        // Load messages
-        async function loadMessages() {
-            try {
-                conversationsList.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading messages...</div>';
-                
-                // Get conversations where current user is a participant
-                const { data: conversationsData, error } = await supabase
-                    .from('conversations')
-                    .select('*')
-                    .contains('participants', [currentUser.id])
-                    .order('last_updated', { ascending: false });
-                
-                if (error) throw error;
-                
-                conversations = conversationsData || [];
-                
-                if (conversations.length > 0) {
-                    let conversationsHTML = '';
-                    
-                    for (const conversation of conversations) {
-                        // Get other participant's info
-                        const otherParticipantId = conversation.participants.find(id => id !== currentUser.id);
-                        if (otherParticipantId) {
-                            const { data: userData, error: userError } = await supabase
-                                .from('users')
-                                .select('*')
-                                .eq('uid', otherParticipantId)
-                                .single();
-                            
-                            if (!userError && userData) {
-                                conversationsHTML += `
-                                    <div class="conversation" data-conversation-id="${conversation.id}" data-user-id="${otherParticipantId}">
-                                        <img src="${userData.photoURL || getDefaultAvatar()}" 
-                                             alt="${userData.username}" 
-                                             class="conversation-avatar">
-                                        <div class="conversation-info">
-                                            <div class="conversation-name">${userData.username}</div>
-                                            <div class="conversation-last-message">${conversation.last_message || 'No messages yet'}</div>
-                                        </div>
-                                        <div class="conversation-time">${formatTime(new Date(conversation.last_updated))}</div>
-                                        ${conversation.unread_count > 0 ? `<div class="conversation-unread">${conversation.unread_count}</div>` : ''}
-                                    </div>
-                                `;
-                            }
-                        }
-                    }
-                    
-                    conversationsList.innerHTML = conversationsHTML;
-                    
-                    // Add click event to conversations
-                    document.querySelectorAll('.conversation').forEach(conv => {
-                        conv.addEventListener('click', () => {
-                            const conversationId = conv.dataset.conversationId;
-                            const userId = conv.dataset.userId;
-                            openChat(conversationId, userId);
-                        });
-                    });
-                    
-                } else {
-                    conversationsList.innerHTML = '<div class="no-conversations"><h3>No messages yet</h3><p>Start a conversation!</p></div>';
-                }
-                
-                // Hide chat by default
-                chatContainer.style.display = 'none';
-                
-            } catch (error) {
-                console.error('Error loading messages:', error);
-                conversationsList.innerHTML = '<div class="error">Error loading messages.</div>';
-            }
-        }
-
-        // Open chat
-        async function openChat(conversationId, userId) {
-            try {
-                // Get user data
-                const { data: userData, error } = await supabase
-                    .from('users')
-                    .select('*')
-                    .eq('uid', userId)
-                    .single();
-                
-                if (error) throw error;
-                
-                currentChatUser = { id: userId, ...userData };
-                
-                // Update chat header
-                chatHeader.innerHTML = `
-                    <img src="${userData.photoURL || getDefaultAvatar()}" 
-                         alt="${userData.username}" 
-                         class="chat-header-avatar">
-                    <div class="chat-header-info">
-                        <div class="chat-header-username">${userData.username}</div>
-                        <div class="chat-header-status">Active now</div>
-                    </div>
-                `;
-                
-                // Load messages
-                await loadChatMessages(conversationId);
-                
-                // Show chat container
-                chatContainer.style.display = 'flex';
-                
-                // Mark conversation as read
-                await markConversationAsRead(conversationId);
-                
-            } catch (error) {
-                console.error('Error opening chat:', error);
-            }
-        }
-
-        // Load chat messages
-        async function loadChatMessages(conversationId) {
-            try {
-                chatMessages.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading messages...</div>';
-                
-                const { data: messages, error } = await supabase
-                    .from('messages')
-                    .select('*')
-                    .eq('conversation_id', conversationId)
-                    .order('timestamp', { ascending: true });
-                
-                if (error) throw error;
-                
-                let messagesHTML = '';
-                
-                messages.forEach(message => {
-                    const isSent = message.sender_id === currentUser.id;
-                    
-                    messagesHTML += `
-                        <div class="message ${isSent ? 'sent' : 'received'}">
-                            <div class="message-text">${message.text}</div>
-                            <div class="message-time">${formatTime(new Date(message.timestamp))}</div>
-                        </div>
-                    `;
-                });
-                
-                chatMessages.innerHTML = messagesHTML;
-                
-                // Scroll to bottom
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                
-            } catch (error) {
-                console.error('Error loading chat messages:', error);
-                chatMessages.innerHTML = '<div class="error">Error loading messages.</div>';
-            }
-        }
-
-        // Send message
-        async function sendMessage() {
-            const messageText = messageInput.value.trim();
-            if (!messageText || !currentChatUser) return;
-            
-            try {
-                // Find or create conversation
-                let conversationId = await findOrCreateConversation(currentChatUser.id);
-                
-                // Add message
-                const { error } = await supabase
-                    .from('messages')
-                    .insert([{
-                        conversation_id: conversationId,
-                        text: messageText,
-                        sender_id: currentUser.id,
-                        timestamp: new Date().toISOString(),
-                        read: false
-                    }]);
-                
-                if (error) throw error;
-                
-                // Update conversation
-                const { error: updateError } = await supabase
-                    .from('conversations')
-                    .update({
-                        last_message: messageText,
-                        last_updated: new Date().toISOString()
-                    })
-                    .eq('id', conversationId);
-                
-                if (updateError) throw updateError;
-                
-                // Clear input
-                messageInput.value = '';
-                
-                // Reload messages
-                await loadChatMessages(conversationId);
-                
-            } catch (error) {
-                console.error('Error sending message:', error);
-                alert('Error sending message. Please try again.');
-            }
-        }
-
-        // Find or create conversation
-        async function findOrCreateConversation(otherUserId) {
-            // Check if conversation already exists
-            for (const conversation of conversations) {
-                if (conversation.participants.includes(otherUserId)) {
-                    return conversation.id;
-                }
+            if (error) {
+                console.error('❌ Google sign-in error:', error);
+                alert('Google sign-in failed: ' + error.message + 
+                      '\n\nPlease make sure:\n1. Google OAuth is enabled in Supabase\n2. Redirect URL is set to: ' + GITHUB_PAGES_URL);
+                throw error;
             }
             
-            // Create new conversation
+            console.log('✅ Google OAuth initiated');
+            
+        } catch (error) {
+            console.error('❌ Error signing in with Google:', error);
+            alert('Error signing in with Google. Please check console for details.');
+        }
+    }
+
+    // Handle user signed in
+    async function handleUserSignedIn(user) {
+        console.log('👤 User signed in:', user);
+        
+        // Get or create user profile
+        const { data: userProfile, error } = await supabase
+            .from('users')
+            .select('*')
+            .eq('uid', user.id)
+            .single();
+        
+        if (error && error.code === 'PGRST116') { // No user found
+            console.log('📝 Creating new user profile...');
+            await createUserProfile(user);
+            showUsernameModal();
+        } else if (userProfile) {
+            currentUserData = userProfile;
+            if (currentUserData.username) {
+                console.log('✅ User has username, showing app content');
+                showAppContent();
+            } else {
+                console.log('ℹ️ User needs to choose username');
+                showUsernameModal();
+            }
+        }
+    }
+
+    // Create user profile
+    async function createUserProfile(user) {
+        try {
+            const userData = {
+                uid: user.id,
+                email: user.email,
+                displayName: user.user_metadata?.full_name || user.email?.split('@')[0] || 'User',
+                photoURL: user.user_metadata?.avatar_url || getDefaultAvatar(),
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+                followers: 0,
+                following: 0,
+                posts: 0,
+                bio: '',
+                website: ''
+            };
+            
             const { data, error } = await supabase
-                .from('conversations')
-                .insert([{
-                    participants: [currentUser.id, otherUserId],
-                    last_message: '',
-                    last_updated: new Date().toISOString(),
-                    unread_count: 0
-                }])
+                .from('users')
+                .insert([userData])
                 .select()
                 .single();
             
             if (error) throw error;
             
-            return data.id;
+            currentUserData = data;
+            console.log('✅ User profile created');
+        } catch (error) {
+            console.error('❌ Error creating user profile:', error);
         }
+    }
 
-        // Mark conversation as read
-        async function markConversationAsRead(conversationId) {
-            try {
-                const { error } = await supabase
-                    .from('conversations')
-                    .update({ unread_count: 0 })
-                    .eq('id', conversationId);
-                
-                if (error) throw error;
-                
-                // Update UI
-                const convElement = document.querySelector(`[data-conversation-id="${conversationId}"] .conversation-unread`);
-                if (convElement) {
-                    convElement.remove();
-                }
-                
-            } catch (error) {
-                console.error('Error marking conversation as read:', error);
-            }
+    // Show username modal
+    function showUsernameModal() {
+        authModal.style.display = 'none';
+        usernameModal.style.display = 'flex';
+        usernameInput.focus();
+        console.log('📝 Showing username modal');
+    }
+
+    // Check username availability
+    async function checkUsernameAvailability() {
+        const username = usernameInput.value.trim().toLowerCase();
+        
+        if (username.length < 3) {
+            usernameCheck.textContent = 'Username must be at least 3 characters';
+            usernameCheck.className = 'username-check taken';
+            saveUsernameBtn.disabled = true;
+            return;
         }
-
-        // Start new message
-        async function startNewMessage() {
-            // In a real app, you would show a modal to select users
-            const sampleUserId = 'sample_user_123';
-            const sampleUser = {
-                id: sampleUserId,
-                username: 'johndoe',
-                photoURL: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80'
-            };
-            
-            currentChatUser = sampleUser;
-            const conversationId = await findOrCreateConversation(sampleUserId);
-            await openChat(conversationId, sampleUserId);
+        
+        if (!/^[a-z0-9_.]+$/.test(username)) {
+            usernameCheck.textContent = 'Username can only contain letters, numbers, underscores, and periods';
+            usernameCheck.className = 'username-check taken';
+            saveUsernameBtn.disabled = true;
+            return;
         }
-
-        // Load stories
-        async function loadStories() {
-            try {
-                // Get stories from last 24 hours
-                const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-                
-                const { data: stories, error } = await supabase
-                    .from('stories')
-                    .select('*')
-                    .gte('created_at', oneDayAgo)
-                    .order('created_at', { ascending: false });
-                
-                if (error) throw error;
-                
-                // Group stories by user
-                const storiesByUser = {};
-                allStories = [];
-                
-                stories.forEach(story => {
-                    if (!storiesByUser[story.user_id]) {
-                        storiesByUser[story.user_id] = [];
-                    }
-                    storiesByUser[story.user_id].push(story);
-                });
-                
-                // Convert to array
-                allStories = Object.values(storiesByUser);
-                
-                // Display stories
-                displayStories(storiesByUser);
-                
-            } catch (error) {
-                console.error('Error loading stories:', error);
-            }
+        
+        // Check if username exists
+        const { data, error } = await supabase
+            .from('users')
+            .select('username')
+            .eq('username', username)
+            .single();
+        
+        if (error && error.code === 'PGRST116') {
+            usernameCheck.textContent = '✓ Username is available';
+            usernameCheck.className = 'username-check available';
+            saveUsernameBtn.disabled = false;
+        } else if (data) {
+            usernameCheck.textContent = '✗ Username is already taken';
+            usernameCheck.className = 'username-check taken';
+            saveUsernameBtn.disabled = true;
         }
+    }
 
-        // Display stories
-        function displayStories(storiesByUser) {
-            let storiesContainer = document.getElementById('storiesContainer');
+    // Save username
+    async function saveUsername() {
+        const username = usernameInput.value.trim().toLowerCase();
+        
+        try {
+            const { error } = await supabase
+                .from('users')
+                .update({
+                    username: username,
+                    updated_at: new Date().toISOString()
+                })
+                .eq('uid', currentUser.id);
             
-            if (!storiesContainer) {
-                storiesContainer = document.createElement('div');
-                storiesContainer.id = 'storiesContainer';
-                storiesContainer.className = 'stories-container';
-                
-                const storiesTitle = document.createElement('div');
-                storiesTitle.className = 'stories-title';
-                storiesTitle.textContent = 'STORIES';
-                storiesContainer.appendChild(storiesTitle);
-                
-                const storiesDiv = document.createElement('div');
-                storiesDiv.className = 'stories';
-                storiesContainer.appendChild(storiesDiv);
-                
-                // Insert at the beginning of posts container
-                if (postsContainer.firstChild) {
-                    postsContainer.insertBefore(storiesContainer, postsContainer.firstChild);
-                } else {
-                    postsContainer.appendChild(storiesContainer);
-                }
-            }
+            if (error) throw error;
             
-            const storiesDiv = storiesContainer.querySelector('.stories');
-            let storiesHTML = '';
+            currentUserData.username = username;
+            usernameModal.style.display = 'none';
+            showAppContent();
             
-            // Add user's own story first
-            storiesHTML += `
-                <div class="story-item" id="myStory">
-                    <div class="story-avatar">
-                        <img src="${currentUserData.photoURL}" alt="Your Story">
-                    </div>
-                    <div class="story-username">Your Story</div>
-                </div>
-            `;
+            console.log('✅ Username saved:', username);
+        } catch (error) {
+            console.error('❌ Error saving username:', error);
+            alert('Error saving username. Please try again.');
+        }
+    }
+
+    // Handle sign out
+    async function handleSignOut() {
+        try {
+            console.log('👋 Signing out...');
+            const { error } = await supabase.auth.signOut();
+            if (error) throw error;
+        } catch (error) {
+            console.error('❌ Error signing out:', error);
+        }
+    }
+
+    // Handle user signed out
+    function handleUserSignedOut() {
+        currentUser = null;
+        currentUserData = null;
+        allStories = [];
+        conversations = [];
+        
+        authModal.style.display = 'flex';
+        usernameModal.style.display = 'none';
+        storyUploadModal.style.display = 'none';
+        createPostModal.style.display = 'none';
+        storyViewerModal.style.display = 'none';
+        
+        // Clear UI
+        navIcons.innerHTML = '';
+        postsContainer.innerHTML = '<div class="loading">Please sign in to continue</div>';
+        exploreContainer.style.display = 'none';
+        messagesContainer.style.display = 'none';
+        sidebar.style.display = 'none';
+        
+        console.log('ℹ️ User signed out, UI reset');
+    }
+
+    // ============================
+    // APP CONTENT FUNCTIONS
+    // ============================
+    // Show main app content
+    function showAppContent() {
+        console.log('📱 Showing app content');
+        
+        // Update navigation
+        updateNavigation();
+        
+        // Load initial content
+        loadHomeContent();
+    }
+
+    // Update navigation
+    function updateNavigation() {
+        navIcons.innerHTML = `
+            <a href="#" class="nav-icon home-btn ${currentActivePage === 'home' ? 'active' : ''}" title="Home">
+                <i class="fas fa-home"></i>
+            </a>
+            <a href="#" class="nav-icon explore-btn ${currentActivePage === 'explore' ? 'active' : ''}" title="Explore">
+                <i class="fas fa-search"></i>
+            </a>
+            <button class="create-story-btn" title="Create Story" id="headerCreateStoryBtn">
+                <i class="fas fa-plus"></i>
+            </button>
+            <button class="create-post-btn" title="Create Post" id="headerCreatePostBtn">
+                <i class="fas fa-plus-square"></i>
+            </button>
+            <a href="#" class="nav-icon messages-btn ${currentActivePage === 'messages' ? 'active' : ''}" title="Messages">
+                <i class="fas fa-paper-plane"></i>
+                <span class="notification-badge" id="messageBadge" style="display: none;">3</span>
+            </a>
+            <a href="#" class="nav-icon notifications-btn" title="Notifications">
+                <i class="fas fa-heart"></i>
+                <span class="notification-badge" id="notificationBadge" style="display: none;">5</span>
+            </a>
+            <img src="${currentUserData.photoURL}" 
+                 alt="User" 
+                 class="user-avatar" 
+                 id="headerUserAvatar"
+                 title="Profile">
+            <button class="sign-out-btn" id="signOutBtn">Sign Out</button>
+        `;
+        
+        // Add event listeners to new navigation elements
+        document.querySelector('.home-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            switchPage('home');
+        });
+        
+        document.querySelector('.explore-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            switchPage('explore');
+        });
+        
+        document.querySelector('.messages-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            switchPage('messages');
+        });
+        
+        document.getElementById('headerCreateStoryBtn').addEventListener('click', showStoryUploadModal);
+        document.getElementById('headerCreatePostBtn').addEventListener('click', showCreatePostModal);
+        document.getElementById('signOutBtn').addEventListener('click', handleSignOut);
+        
+        // Update sidebar
+        updateSidebar();
+        
+        console.log('✅ Navigation updated');
+    }
+
+    // Switch between pages
+    function switchPage(page) {
+        console.log('🔄 Switching to page:', page);
+        currentActivePage = page;
+        
+        // Update active state in navigation
+        document.querySelectorAll('.nav-icon').forEach(icon => {
+            icon.classList.remove('active');
+        });
+        
+        if (page === 'home') {
+            document.querySelector('.home-btn').classList.add('active');
+            postsContainer.style.display = 'block';
+            exploreContainer.style.display = 'none';
+            messagesContainer.style.display = 'none';
+            sidebar.style.display = 'block';
+            loadHomeContent();
+        } else if (page === 'explore') {
+            document.querySelector('.explore-btn').classList.add('active');
+            postsContainer.style.display = 'none';
+            exploreContainer.style.display = 'block';
+            messagesContainer.style.display = 'none';
+            sidebar.style.display = 'block';
+            loadExploreContent();
+        } else if (page === 'messages') {
+            document.querySelector('.messages-btn').classList.add('active');
+            postsContainer.style.display = 'none';
+            exploreContainer.style.display = 'none';
+            messagesContainer.style.display = 'flex';
+            sidebar.style.display = 'none';
+            loadMessages();
+        }
+    }
+
+    // Update sidebar
+    function updateSidebar() {
+        sidebarUserProfile.style.display = 'flex';
+        sidebarUserAvatar.src = currentUserData.photoURL;
+        sidebarUsername.textContent = currentUserData.username;
+        sidebarFullName.textContent = currentUserData.displayName;
+        
+        suggestionsContainer.style.display = 'block';
+        loadSuggestions();
+        
+        console.log('✅ Sidebar updated');
+    }
+
+    // ============================
+    // HOME FEED FUNCTIONS
+    // ============================
+    // Load home content
+    async function loadHomeContent() {
+        try {
+            console.log('📸 Loading home content...');
+            postsContainer.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading posts...</div>';
             
-            // Add other users' stories
-            let userIndex = 0;
-            Object.entries(storiesByUser).forEach(([userId, stories]) => {
-                if (userId === currentUser.id) return;
-                
-                const userStory = stories[0];
-                const hasNewStories = !userStory.views || !userStory.views.includes(currentUser.id);
-                
-                storiesHTML += `
-                    <div class="story-item" data-user-index="${userIndex}">
-                        <div class="story-avatar">
-                            <img src="${userStory.user_avatar || getDefaultAvatar()}" alt="${userStory.username}">
-                        </div>
-                        <div class="story-username">${userStory.username}</div>
-                        ${hasNewStories ? '<div class="story-new-badge"></div>' : ''}
+            // Load stories
+            await loadStories();
+            
+            // Load posts
+            const { data: posts, error } = await supabase
+                .from('posts')
+                .select('*')
+                .order('created_at', { ascending: false })
+                .limit(20);
+            
+            if (error) throw error;
+            
+            if (!posts || posts.length === 0) {
+                postsContainer.innerHTML = `
+                    <div class="stories-container" id="storiesContainer"></div>
+                    <div class="no-posts">
+                        <h3>No posts yet</h3>
+                        <p>Be the first to share a post!</p>
+                        <button class="create-post-btn" id="createFirstPostBtn">Create Post</button>
                     </div>
                 `;
-                userIndex++;
-            });
-            
-            storiesDiv.innerHTML = storiesHTML;
-            
-            // Add event listeners
-            document.getElementById('myStory').addEventListener('click', showStoryUploadModal);
-            document.querySelectorAll('.story-item[data-user-index]').forEach((item, index) => {
-                item.addEventListener('click', () => {
-                    openStoryViewer(index);
+                document.getElementById('createFirstPostBtn').addEventListener('click', showCreatePostModal);
+                console.log('ℹ️ No posts found');
+            } else {
+                let postsHTML = '';
+                posts.forEach(post => {
+                    postsHTML += createPostHTML(post);
                 });
-            });
-        }
-
-        // Show story upload modal
-        function showStoryUploadModal() {
-            storyUploadModal.style.display = 'flex';
-            uploadPreview.style.display = 'none';
-            previewImage.style.display = 'none';
-            previewVideo.style.display = 'none';
-            storyCaptionInput.value = '';
-            selectedStoryFile = null;
-            storyFileType = null;
-            uploadStoryBtn.disabled = true;
-        }
-
-        // Handle story file selection
-        function handleStoryFileSelect(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            
-            if (!validateFile(file, 30)) return;
-            
-            selectedStoryFile = file;
-            storyFileType = file.type.startsWith('image/') ? 'image' : 'video';
-            
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                if (storyFileType === 'image') {
-                    previewImage.src = e.target.result;
-                    previewImage.style.display = 'block';
-                    previewVideo.style.display = 'none';
+                
+                const storiesContainer = document.getElementById('storiesContainer');
+                if (storiesContainer) {
+                    postsContainer.innerHTML = storiesContainer.outerHTML + postsHTML;
                 } else {
-                    previewVideo.src = e.target.result;
-                    previewVideo.style.display = 'block';
-                    previewImage.style.display = 'none';
+                    postsContainer.innerHTML = postsHTML;
                 }
-                uploadPreview.style.display = 'block';
-                uploadStoryBtn.disabled = false;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // Remove story preview
-        function removeStoryPreview() {
-            uploadPreview.style.display = 'none';
-            selectedStoryFile = null;
-            storyFileType = null;
-            uploadStoryBtn.disabled = true;
-        }
-
-        // Upload story
-        async function uploadStory() {
-            if (!selectedStoryFile || !currentUser) return;
+                
+                // Add event listeners to posts
+                document.querySelectorAll('.like-btn').forEach(btn => {
+                    btn.addEventListener('click', handlePostLike);
+                });
+                
+                document.querySelectorAll('.comment-btn').forEach(btn => {
+                    btn.addEventListener('click', handlePostComment);
+                });
+                
+                console.log(`✅ Loaded ${posts.length} posts`);
+            }
             
-            uploadStoryBtn.disabled = true;
-            uploadStoryBtn.textContent = 'Uploading...';
+        } catch (error) {
+            console.error('❌ Error loading home content:', error);
+            postsContainer.innerHTML = '<div class="error">Error loading content. Please try again.</div>';
+        }
+    }
+
+    // ============================
+    // STORIES FUNCTIONS
+    // ============================
+    // Load stories
+    async function loadStories() {
+        try {
+            console.log('📖 Loading stories...');
             
-            try {
-                // Upload to Supabase Storage
+            // Get stories from last 24 hours
+            const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+            
+            const { data: stories, error } = await supabase
+                .from('stories')
+                .select('*')
+                .gte('created_at', oneDayAgo)
+                .order('created_at', { ascending: false });
+            
+            if (error) throw error;
+            
+            // Group stories by user
+            const storiesByUser = {};
+            allStories = [];
+            
+            stories.forEach(story => {
+                if (!storiesByUser[story.user_id]) {
+                    storiesByUser[story.user_id] = [];
+                }
+                storiesByUser[story.user_id].push(story);
+            });
+            
+            // Convert to array
+            allStories = Object.values(storiesByUser);
+            
+            // Display stories
+            displayStories(storiesByUser);
+            
+            console.log(`✅ Loaded stories from ${Object.keys(storiesByUser).length} users`);
+            
+        } catch (error) {
+            console.error('❌ Error loading stories:', error);
+        }
+    }
+
+    // Display stories
+    function displayStories(storiesByUser) {
+        let storiesContainer = document.getElementById('storiesContainer');
+        
+        if (!storiesContainer) {
+            storiesContainer = document.createElement('div');
+            storiesContainer.id = 'storiesContainer';
+            storiesContainer.className = 'stories-container';
+            
+            const storiesTitle = document.createElement('div');
+            storiesTitle.className = 'stories-title';
+            storiesTitle.textContent = 'STORIES';
+            storiesContainer.appendChild(storiesTitle);
+            
+            const storiesDiv = document.createElement('div');
+            storiesDiv.className = 'stories';
+            storiesContainer.appendChild(storiesDiv);
+            
+            // Insert at the beginning of posts container
+            if (postsContainer.firstChild) {
+                postsContainer.insertBefore(storiesContainer, postsContainer.firstChild);
+            } else {
+                postsContainer.appendChild(storiesContainer);
+            }
+        }
+        
+        const storiesDiv = storiesContainer.querySelector('.stories');
+        let storiesHTML = '';
+        
+        // Add user's own story first
+        storiesHTML += `
+            <div class="story-item" id="myStory">
+                <div class="story-avatar">
+                    <img src="${currentUserData.photoURL}" alt="Your Story">
+                </div>
+                <div class="story-username">Your Story</div>
+            </div>
+        `;
+        
+        // Add other users' stories
+        let userIndex = 0;
+        Object.entries(storiesByUser).forEach(([userId, stories]) => {
+            if (userId === currentUser.id) return;
+            
+            const userStory = stories[0];
+            const hasNewStories = !userStory.views || !userStory.views.includes(currentUser.id);
+            
+            storiesHTML += `
+                <div class="story-item" data-user-index="${userIndex}">
+                    <div class="story-avatar">
+                        <img src="${userStory.user_avatar || getDefaultAvatar()}" alt="${userStory.username}">
+                    </div>
+                    <div class="story-username">${userStory.username}</div>
+                    ${hasNewStories ? '<div class="story-new-badge"></div>' : ''}
+                </div>
+            `;
+            userIndex++;
+        });
+        
+        storiesDiv.innerHTML = storiesHTML;
+        
+        // Add event listeners
+        document.getElementById('myStory').addEventListener('click', showStoryUploadModal);
+        document.querySelectorAll('.story-item[data-user-index]').forEach((item, index) => {
+            item.addEventListener('click', () => {
+                openStoryViewer(index);
+            });
+        });
+    }
+
+    // Show story upload modal
+    function showStoryUploadModal() {
+        console.log('📤 Showing story upload modal');
+        storyUploadModal.style.display = 'flex';
+        uploadPreview.style.display = 'none';
+        previewImage.style.display = 'none';
+        previewVideo.style.display = 'none';
+        storyCaptionInput.value = '';
+        selectedStoryFile = null;
+        storyFileType = null;
+        uploadStoryBtn.disabled = true;
+    }
+
+    // Handle story file selection
+    function handleStoryFileSelect(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        if (!validateFile(file, 30)) return;
+        
+        selectedStoryFile = file;
+        storyFileType = file.type.startsWith('image/') ? 'image' : 'video';
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            if (storyFileType === 'image') {
+                previewImage.src = e.target.result;
+                previewImage.style.display = 'block';
+                previewVideo.style.display = 'none';
+            } else {
+                previewVideo.src = e.target.result;
+                previewVideo.style.display = 'block';
+                previewImage.style.display = 'none';
+            }
+            uploadPreview.style.display = 'block';
+            uploadStoryBtn.disabled = false;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // Remove story preview
+    function removeStoryPreview() {
+        uploadPreview.style.display = 'none';
+        selectedStoryFile = null;
+        storyFileType = null;
+        uploadStoryBtn.disabled = true;
+    }
+
+    // Upload story
+    async function uploadStory() {
+        if (!selectedStoryFile || !currentUser) return;
+        
+        console.log('⬆️ Uploading story...');
+        uploadStoryBtn.disabled = true;
+        uploadStoryBtn.textContent = 'Uploading...';
+        
+        try {
+            // Upload to Supabase Storage
+            const timestamp = Date.now();
+            const fileExtension = selectedStoryFile.name.split('.').pop();
+            const fileName = `stories/${currentUser.id}/${timestamp}.${fileExtension}`;
+            
+            console.log('📁 Uploading file:', fileName);
+            
+            const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('media')
+                .upload(fileName, selectedStoryFile);
+            
+            if (uploadError) throw uploadError;
+            
+            // Get public URL
+            const { data: { publicUrl } } = supabase.storage
+                .from('media')
+                .getPublicUrl(fileName);
+            
+            console.log('✅ File uploaded, URL:', publicUrl);
+            
+            // Save to database
+            const { error: dbError } = await supabase
+                .from('stories')
+                .insert([{
+                    user_id: currentUser.id,
+                    username: currentUserData.username,
+                    user_avatar: currentUserData.photoURL,
+                    media_url: publicUrl,
+                    media_type: storyFileType,
+                    caption: storyCaptionInput.value.trim(),
+                    created_at: new Date().toISOString(),
+                    expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+                    views: []
+                }]);
+            
+            if (dbError) throw dbError;
+            
+            console.log('✅ Story saved to database');
+            
+            // Close modal and refresh
+            hideModal(storyUploadModal);
+            loadStories();
+            
+            // Reset button
+            setTimeout(() => {
+                uploadStoryBtn.textContent = 'Share to Story';
+            }, 2000);
+            
+        } catch (error) {
+            console.error('❌ Error uploading story:', error);
+            alert('Error uploading story. Please try again.');
+            uploadStoryBtn.disabled = false;
+            uploadStoryBtn.textContent = 'Share to Story';
+        }
+    }
+
+    // ============================
+    // POST FUNCTIONS
+    // ============================
+    // Show create post modal
+    function showCreatePostModal() {
+        console.log('📷 Showing create post modal');
+        createPostModal.style.display = 'flex';
+        postUploadArea.style.display = 'flex';
+        postPreview.style.display = 'none';
+        postDetails.style.display = 'none';
+        selectedPostFiles = [];
+        currentPostFileIndex = 0;
+        postCaptionTextarea.value = '';
+        postLocationInput.value = '';
+        sharePostBtn.disabled = true;
+        
+        // Update user info
+        postUserAvatarSmall.src = currentUserData.photoURL;
+        postUsername.textContent = currentUserData.username;
+    }
+
+    // Handle post file selection
+    function handlePostFileSelect(e) {
+        const files = Array.from(e.target.files);
+        if (files.length === 0) return;
+        
+        console.log(`📁 Selected ${files.length} files`);
+        
+        // Validate files
+        const validFiles = files.filter(file => validateFile(file, 50));
+        if (validFiles.length === 0) return;
+        
+        selectedPostFiles = validFiles;
+        currentPostFileIndex = 0;
+        
+        // Show preview
+        postUploadArea.style.display = 'none';
+        postPreview.style.display = 'block';
+        postDetails.style.display = 'flex';
+        sharePostBtn.disabled = false;
+        
+        showPostMedia(0);
+    }
+
+    // Show post media
+    function showPostMedia(index) {
+        if (index < 0 || index >= selectedPostFiles.length) return;
+        
+        currentPostFileIndex = index;
+        const file = selectedPostFiles[index];
+        const isImage = file.type.startsWith('image/');
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            if (isImage) {
+                postPreviewImage.src = e.target.result;
+                postPreviewImage.style.display = 'block';
+                postPreviewVideo.style.display = 'none';
+            } else {
+                postPreviewVideo.src = e.target.result;
+                postPreviewVideo.style.display = 'block';
+                postPreviewImage.style.display = 'none';
+                postPreviewVideo.currentTime = 0;
+            }
+        };
+        reader.readAsDataURL(file);
+        
+        // Update navigation buttons
+        prevMediaBtn.style.display = index > 0 ? 'flex' : 'none';
+        nextMediaBtn.style.display = index < selectedPostFiles.length - 1 ? 'flex' : 'none';
+    }
+
+    // Remove post preview
+    function removePostPreview() {
+        postUploadArea.style.display = 'flex';
+        postPreview.style.display = 'none';
+        postDetails.style.display = 'none';
+        selectedPostFiles = [];
+        sharePostBtn.disabled = true;
+    }
+
+    // Upload post
+    async function uploadPost() {
+        if (selectedPostFiles.length === 0) return;
+        
+        console.log(`⬆️ Uploading post with ${selectedPostFiles.length} files`);
+        sharePostBtn.disabled = true;
+        sharePostBtn.textContent = 'Sharing...';
+        
+        try {
+            // Upload all files to Supabase Storage
+            const mediaUrls = [];
+            const mediaTypes = [];
+            
+            for (let i = 0; i < selectedPostFiles.length; i++) {
+                const file = selectedPostFiles[i];
                 const timestamp = Date.now();
-                const fileExtension = selectedStoryFile.name.split('.').pop();
-                const fileName = `stories/${currentUser.id}/${timestamp}.${fileExtension}`;
+                const fileExtension = file.name.split('.').pop();
+                const fileName = `posts/${currentUser.id}/${timestamp}_${i}.${fileExtension}`;
+                
+                console.log(`📁 Uploading file ${i + 1}/${selectedPostFiles.length}:`, fileName);
                 
                 const { data: uploadData, error: uploadError } = await supabase.storage
                     .from('media')
-                    .upload(fileName, selectedStoryFile);
+                    .upload(fileName, file);
                 
                 if (uploadError) throw uploadError;
                 
@@ -2729,798 +2850,553 @@
                     .from('media')
                     .getPublicUrl(fileName);
                 
-                // Save to database
-                const { error: dbError } = await supabase
-                    .from('stories')
-                    .insert([{
-                        user_id: currentUser.id,
-                        username: currentUserData.username,
-                        user_avatar: currentUserData.photoURL,
-                        media_url: publicUrl,
-                        media_type: storyFileType,
-                        caption: storyCaptionInput.value.trim(),
-                        created_at: new Date().toISOString(),
-                        expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-                        views: []
-                    }]);
-                
-                if (dbError) throw dbError;
-                
-                console.log('Story uploaded');
-                
-                // Close modal and refresh
-                hideModal(storyUploadModal);
-                loadStories();
-                
-                // Reset button
-                setTimeout(() => {
-                    uploadStoryBtn.textContent = 'Share to Story';
-                }, 2000);
-                
-            } catch (error) {
-                console.error('Error uploading story:', error);
-                alert('Error uploading story. Please try again.');
-                uploadStoryBtn.disabled = false;
-                uploadStoryBtn.textContent = 'Share to Story';
-            }
-        }
-
-        // Open story viewer
-        async function openStoryViewer(userIndex) {
-            if (userIndex < 0 || userIndex >= allStories.length) return;
-            
-            currentStoryIndex = 0;
-            currentUserStoryIndex = userIndex;
-            
-            const userStories = allStories[currentUserStoryIndex];
-            if (!userStories || userStories.length === 0) return;
-            
-            // Mark as viewed
-            const currentStory = userStories[0];
-            if (currentStory.views && !currentStory.views.includes(currentUser.id)) {
-                const updatedViews = [...(currentStory.views || []), currentUser.id];
-                const { error } = await supabase
-                    .from('stories')
-                    .update({ views: updatedViews })
-                    .eq('id', currentStory.id);
-                
-                if (error) console.error('Error updating story views:', error);
+                mediaUrls.push(publicUrl);
+                mediaTypes.push(file.type.startsWith('image/') ? 'image' : 'video');
             }
             
-            // Show viewer
-            storyViewerModal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
+            console.log('✅ Files uploaded, URLs:', mediaUrls);
             
-            loadStory(0);
-        }
-
-        // Load story in viewer
-        function loadStory(storyIndex) {
-            const userStories = allStories[currentUserStoryIndex];
-            if (!userStories || storyIndex >= userStories.length) {
-                if (allStories.length > currentUserStoryIndex + 1) {
-                    currentUserStoryIndex++;
-                    currentStoryIndex = 0;
-                    loadStory(0);
-                } else {
-                    closeStoryViewer();
-                }
-                return;
-            }
-            
-            const story = userStories[storyIndex];
-            currentStoryIndex = storyIndex;
-            
-            // Update UI
-            storyViewerAvatar.src = story.user_avatar || getDefaultAvatar();
-            storyViewerUsername.textContent = story.username;
-            storyViewerTime.textContent = getTimeAgo(new Date(story.created_at));
-            
-            // Clear previous media
-            storyImageView.style.display = 'none';
-            storyVideoView.style.display = 'none';
-            storyCaptionContainer.style.display = 'none';
-            
-            // Setup progress bars
-            setupStoryProgressBars(userStories.length);
-            
-            // Load media
-            if (story.media_type === 'image') {
-                storyImageView.src = story.media_url;
-                storyImageView.style.display = 'block';
-            } else {
-                storyVideoView.src = story.media_url;
-                storyVideoView.style.display = 'block';
-                storyVideoView.currentTime = 0;
-                storyVideoView.play();
-            }
-            
-            // Show caption
-            if (story.caption) {
-                storyCaptionText.textContent = story.caption;
-                storyCaptionContainer.style.display = 'block';
-            }
-            
-            // Start progress
-            startStoryProgressTimer(storyIndex, userStories.length);
-        }
-
-        // Setup story progress bars
-        function setupStoryProgressBars(totalStories) {
-            storyProgressContainer.innerHTML = '';
-            
-            for (let i = 0; i < totalStories; i++) {
-                const progressBar = document.createElement('div');
-                progressBar.className = 'story-progress-bar';
-                
-                const progressFill = document.createElement('div');
-                progressFill.className = 'story-progress-fill';
-                progressFill.id = `progress-fill-${i}`;
-                
-                progressBar.appendChild(progressFill);
-                storyProgressContainer.appendChild(progressBar);
-            }
-        }
-
-        // Start story progress timer
-        function startStoryProgressTimer(storyIndex, totalStories) {
-            if (storyProgressInterval) {
-                clearInterval(storyProgressInterval);
-            }
-            
-            // Reset progress bars
-            for (let i = 0; i < totalStories; i++) {
-                const progressFill = document.getElementById(`progress-fill-${i}`);
-                if (progressFill) {
-                    progressFill.style.width = i < storyIndex ? '100%' : '0%';
-                }
-            }
-            
-            let progress = 0;
-            const increment = 100 / (storyDuration / 100);
-            
-            storyProgressInterval = setInterval(() => {
-                progress += increment;
-                const currentProgressFill = document.getElementById(`progress-fill-${storyIndex}`);
-                if (currentProgressFill) {
-                    currentProgressFill.style.width = `${Math.min(progress, 100)}%`;
-                }
-                
-                if (progress >= 100) {
-                    clearInterval(storyProgressInterval);
-                    if (storyIndex < totalStories - 1) {
-                        loadStory(storyIndex + 1);
-                    } else if (allStories.length > currentUserStoryIndex + 1) {
-                        currentUserStoryIndex++;
-                        currentStoryIndex = 0;
-                        loadStory(0);
-                    } else {
-                        closeStoryViewer();
-                    }
-                }
-            }, 100);
-            
-            // Handle video controls
-            if (storyVideoView.style.display === 'block') {
-                storyVideoView.onpause = () => {
-                    if (storyProgressInterval) clearInterval(storyProgressInterval);
-                };
-                
-                storyVideoView.onplay = () => {
-                    startStoryProgressTimer(storyIndex, totalStories);
-                };
-                
-                storyVideoView.onended = () => {
-                    if (storyProgressInterval) clearInterval(storyProgressInterval);
-                    if (storyIndex < totalStories - 1) {
-                        loadStory(storyIndex + 1);
-                    } else if (allStories.length > currentUserStoryIndex + 1) {
-                        currentUserStoryIndex++;
-                        currentStoryIndex = 0;
-                        loadStory(0);
-                    } else {
-                        closeStoryViewer();
-                    }
-                };
-            }
-        }
-
-        // Show previous story
-        function showPreviousStory() {
-            if (currentStoryIndex > 0) {
-                loadStory(currentStoryIndex - 1);
-            } else if (currentUserStoryIndex > 0) {
-                currentUserStoryIndex--;
-                const previousUserStories = allStories[currentUserStoryIndex];
-                loadStory(previousUserStories.length - 1);
-            }
-        }
-
-        // Show next story
-        function showNextStory() {
-            const userStories = allStories[currentUserStoryIndex];
-            if (currentStoryIndex < userStories.length - 1) {
-                loadStory(currentStoryIndex + 1);
-            } else if (allStories.length > currentUserStoryIndex + 1) {
-                currentUserStoryIndex++;
-                loadStory(0);
-            } else {
-                closeStoryViewer();
-            }
-        }
-
-        // Close story viewer
-        function closeStoryViewer() {
-            storyViewerModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-            
-            if (storyProgressInterval) {
-                clearInterval(storyProgressInterval);
-                storyProgressInterval = null;
-            }
-            
-            if (storyVideoView.style.display === 'block') {
-                storyVideoView.pause();
-            }
-            
-            // Refresh stories
-            loadStories();
-        }
-
-        // Handle story reply
-        function handleStoryReply(e) {
-            if (e.key === 'Enter' && storyReplyInput.value.trim()) {
-                const message = storyReplyInput.value.trim();
-                const userStories = allStories[currentUserStoryIndex];
-                const currentStory = userStories[currentStoryIndex];
-                
-                console.log('Story reply:', {
-                    storyId: currentStory.id,
-                    userId: currentUser.id,
+            // Save post to database
+            const { error } = await supabase
+                .from('posts')
+                .insert([{
+                    user_id: currentUser.id,
                     username: currentUserData.username,
-                    message: message
-                });
-                
-                storyReplyInput.value = '';
-                
-                // Show confirmation
-                const originalPlaceholder = storyReplyInput.placeholder;
-                storyReplyInput.placeholder = 'Sent!';
-                setTimeout(() => {
-                    storyReplyInput.placeholder = originalPlaceholder;
-                }, 2000);
-            }
-        }
-
-        // Show create post modal
-        function showCreatePostModal() {
-            createPostModal.style.display = 'flex';
-            postUploadArea.style.display = 'flex';
-            postPreview.style.display = 'none';
-            postDetails.style.display = 'none';
-            selectedPostFiles = [];
-            currentPostFileIndex = 0;
-            postCaptionTextarea.value = '';
-            postLocationInput.value = '';
-            sharePostBtn.disabled = true;
+                    user_avatar: currentUserData.photoURL,
+                    media_urls: mediaUrls,
+                    media_types: mediaTypes,
+                    caption: postCaptionTextarea.value.trim(),
+                    location: postLocationInput.value.trim(),
+                    likes_count: 0,
+                    comments_count: 0,
+                    liked_by: [],
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                }]);
             
-            // Update user info
-            postUserAvatarSmall.src = currentUserData.photoURL;
-            postUsername.textContent = currentUserData.username;
-        }
-
-        // Handle post file selection
-        function handlePostFileSelect(e) {
-            const files = Array.from(e.target.files);
-            if (files.length === 0) return;
+            if (error) throw error;
             
-            // Validate files
-            const validFiles = files.filter(file => validateFile(file, 50));
-            if (validFiles.length === 0) return;
+            console.log('✅ Post saved to database');
             
-            selectedPostFiles = validFiles;
-            currentPostFileIndex = 0;
+            // Update user's post count
+            const { error: updateError } = await supabase
+                .from('users')
+                .update({
+                    posts: (currentUserData.posts || 0) + 1,
+                    updated_at: new Date().toISOString()
+                })
+                .eq('uid', currentUser.id);
             
-            // Show preview
-            postUploadArea.style.display = 'none';
-            postPreview.style.display = 'block';
-            postDetails.style.display = 'flex';
-            sharePostBtn.disabled = false;
+            if (updateError) throw updateError;
             
-            showPostMedia(0);
-        }
-
-        // Show post media
-        function showPostMedia(index) {
-            if (index < 0 || index >= selectedPostFiles.length) return;
+            console.log('✅ User post count updated');
             
-            currentPostFileIndex = index;
-            const file = selectedPostFiles[index];
-            const isImage = file.type.startsWith('image/');
+            // Close modal and refresh
+            hideModal(createPostModal);
+            loadHomeContent();
             
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                if (isImage) {
-                    postPreviewImage.src = e.target.result;
-                    postPreviewImage.style.display = 'block';
-                    postPreviewVideo.style.display = 'none';
-                } else {
-                    postPreviewVideo.src = e.target.result;
-                    postPreviewVideo.style.display = 'block';
-                    postPreviewImage.style.display = 'none';
-                    postPreviewVideo.currentTime = 0;
-                }
-            };
-            reader.readAsDataURL(file);
-            
-            // Update navigation buttons
-            prevMediaBtn.style.display = index > 0 ? 'flex' : 'none';
-            nextMediaBtn.style.display = index < selectedPostFiles.length - 1 ? 'flex' : 'none';
-        }
-
-        // Remove post preview
-        function removePostPreview() {
-            postUploadArea.style.display = 'flex';
-            postPreview.style.display = 'none';
-            postDetails.style.display = 'none';
-            selectedPostFiles = [];
-            sharePostBtn.disabled = true;
-        }
-
-        // Upload post
-        async function uploadPost() {
-            if (selectedPostFiles.length === 0) return;
-            
-            sharePostBtn.disabled = true;
-            sharePostBtn.textContent = 'Sharing...';
-            
-            try {
-                // Upload all files to Supabase Storage
-                const mediaUrls = [];
-                const mediaTypes = [];
-                
-                for (const file of selectedPostFiles) {
-                    const timestamp = Date.now();
-                    const fileExtension = file.name.split('.').pop();
-                    const fileName = `posts/${currentUser.id}/${timestamp}_${Math.random().toString(36).substr(2, 9)}.${fileExtension}`;
-                    
-                    const { data: uploadData, error: uploadError } = await supabase.storage
-                        .from('media')
-                        .upload(fileName, file);
-                    
-                    if (uploadError) throw uploadError;
-                    
-                    // Get public URL
-                    const { data: { publicUrl } } = supabase.storage
-                        .from('media')
-                        .getPublicUrl(fileName);
-                    
-                    mediaUrls.push(publicUrl);
-                    mediaTypes.push(file.type.startsWith('image/') ? 'image' : 'video');
-                }
-                
-                // Save post to database
-                const { error } = await supabase
-                    .from('posts')
-                    .insert([{
-                        user_id: currentUser.id,
-                        username: currentUserData.username,
-                        user_avatar: currentUserData.photoURL,
-                        media_urls: mediaUrls,
-                        media_types: mediaTypes,
-                        caption: postCaptionTextarea.value.trim(),
-                        location: postLocationInput.value.trim(),
-                        likes_count: 0,
-                        comments_count: 0,
-                        liked_by: [],
-                        created_at: new Date().toISOString(),
-                        updated_at: new Date().toISOString()
-                    }]);
-                
-                if (error) throw error;
-                
-                console.log('Post uploaded');
-                
-                // Update user's post count
-                const { error: updateError } = await supabase
-                    .from('users')
-                    .update({
-                        posts: (currentUserData.posts || 0) + 1,
-                        updated_at: new Date().toISOString()
-                    })
-                    .eq('uid', currentUser.id);
-                
-                if (updateError) throw updateError;
-                
-                // Close modal and refresh
-                hideModal(createPostModal);
-                loadHomeContent();
-                
-                // Reset button
-                setTimeout(() => {
-                    sharePostBtn.textContent = 'Share';
-                }, 2000);
-                
-            } catch (error) {
-                console.error('Error uploading post:', error);
-                alert('Error uploading post. Please try again.');
-                sharePostBtn.disabled = false;
+            // Reset button
+            setTimeout(() => {
                 sharePostBtn.textContent = 'Share';
-            }
-        }
-
-        // Handle post like
-        async function handlePostLike(e) {
-            const likeBtn = e.currentTarget;
-            const postId = likeBtn.dataset.postId;
+            }, 2000);
             
-            try {
-                const { data: post, error } = await supabase
-                    .from('posts')
-                    .select('*')
-                    .eq('id', postId)
-                    .single();
+        } catch (error) {
+            console.error('❌ Error uploading post:', error);
+            alert('Error uploading post. Please try again.');
+            sharePostBtn.disabled = false;
+            sharePostBtn.textContent = 'Share';
+        }
+    }
+
+    // ============================
+    // POST INTERACTIONS
+    // ============================
+    // Handle post like
+    async function handlePostLike(e) {
+        const likeBtn = e.currentTarget;
+        const postId = likeBtn.dataset.postId;
+        
+        console.log(`❤️ Handling like for post ${postId}`);
+        
+        try {
+            const { data: post, error } = await supabase
+                .from('posts')
+                .select('*')
+                .eq('id', postId)
+                .single();
+            
+            if (error) throw error;
+            
+            const isLiked = post.liked_by?.includes(currentUser.id);
+            let updatedLikedBy = [...(post.liked_by || [])];
+            let updatedLikesCount = post.likes_count || 0;
+            
+            if (isLiked) {
+                // Unlike
+                updatedLikedBy = updatedLikedBy.filter(id => id !== currentUser.id);
+                updatedLikesCount = Math.max(0, updatedLikesCount - 1);
                 
-                if (error) throw error;
+                likeBtn.classList.remove('liked');
+                likeBtn.querySelector('i').classList.remove('fas');
+                likeBtn.querySelector('i').classList.add('far');
                 
-                const isLiked = post.liked_by?.includes(currentUser.id);
-                let updatedLikedBy = [...(post.liked_by || [])];
-                let updatedLikesCount = post.likes_count || 0;
+                console.log('👎 Unliked post');
+            } else {
+                // Like
+                updatedLikedBy.push(currentUser.id);
+                updatedLikesCount += 1;
                 
-                if (isLiked) {
-                    // Unlike
-                    updatedLikedBy = updatedLikedBy.filter(id => id !== currentUser.id);
-                    updatedLikesCount = Math.max(0, updatedLikesCount - 1);
-                    
-                    likeBtn.classList.remove('liked');
-                    likeBtn.querySelector('i').classList.remove('fas');
-                    likeBtn.querySelector('i').classList.add('far');
-                } else {
-                    // Like
-                    updatedLikedBy.push(currentUser.id);
-                    updatedLikesCount += 1;
-                    
-                    likeBtn.classList.add('liked');
-                    likeBtn.querySelector('i').classList.remove('far');
-                    likeBtn.querySelector('i').classList.add('fas');
-                }
+                likeBtn.classList.add('liked');
+                likeBtn.querySelector('i').classList.remove('far');
+                likeBtn.querySelector('i').classList.add('fas');
                 
-                // Update post in database
+                console.log('👍 Liked post');
+            }
+            
+            // Update post in database
+            const { error: updateError } = await supabase
+                .from('posts')
+                .update({
+                    liked_by: updatedLikedBy,
+                    likes_count: updatedLikesCount,
+                    updated_at: new Date().toISOString()
+                })
+                .eq('id', postId);
+            
+            if (updateError) throw updateError;
+            
+            // Update likes count display
+            const likesElement = document.getElementById(`likes-count-${postId}`);
+            if (likesElement) {
+                likesElement.textContent = `${updatedLikesCount} likes`;
+            }
+            
+        } catch (error) {
+            console.error('❌ Error handling like:', error);
+        }
+    }
+
+    // Handle post comment
+    async function handlePostComment(e) {
+        const commentBtn = e.currentTarget;
+        const postId = commentBtn.dataset.postId;
+        const commentInput = document.querySelector(`[data-post-id="${postId}"] .comment-input`);
+        const commentText = commentInput?.value.trim();
+        
+        if (!commentText) return;
+        
+        console.log(`💬 Posting comment on post ${postId}:`, commentText);
+        
+        try {
+            // Add comment to database
+            const { error } = await supabase
+                .from('comments')
+                .insert([{
+                    post_id: postId,
+                    user_id: currentUser.id,
+                    username: currentUserData.username,
+                    user_avatar: currentUserData.photoURL,
+                    text: commentText,
+                    created_at: new Date().toISOString()
+                }]);
+            
+            if (error) throw error;
+            
+            console.log('✅ Comment posted');
+            
+            // Update post comment count
+            const { data: post, error: postError } = await supabase
+                .from('posts')
+                .select('comments_count')
+                .eq('id', postId)
+                .single();
+            
+            if (!postError && post) {
+                const updatedCount = (post.comments_count || 0) + 1;
+                
                 const { error: updateError } = await supabase
                     .from('posts')
                     .update({
-                        liked_by: updatedLikedBy,
-                        likes_count: updatedLikesCount,
+                        comments_count: updatedCount,
                         updated_at: new Date().toISOString()
                     })
                     .eq('id', postId);
                 
                 if (updateError) throw updateError;
                 
-                // Update likes count display
-                const likesElement = document.getElementById(`likes-count-${postId}`);
-                if (likesElement) {
-                    likesElement.textContent = `${updatedLikesCount} likes`;
-                }
-                
-            } catch (error) {
-                console.error('Error handling like:', error);
+                console.log('✅ Post comment count updated');
             }
-        }
-
-        // Handle post comment
-        async function handlePostComment(e) {
-            const commentBtn = e.currentTarget;
-            const postId = commentBtn.dataset.postId;
-            const commentInput = document.querySelector(`[data-post-id="${postId}"] .comment-input`);
-            const commentText = commentInput?.value.trim();
             
-            if (!commentText) return;
+            // Clear input
+            if (commentInput) commentInput.value = '';
             
-            try {
-                // Add comment to database
-                const { error } = await supabase
-                    .from('comments')
-                    .insert([{
-                        post_id: postId,
-                        user_id: currentUser.id,
-                        username: currentUserData.username,
-                        user_avatar: currentUserData.photoURL,
-                        text: commentText,
-                        created_at: new Date().toISOString()
-                    }]);
-                
-                if (error) throw error;
-                
-                // Update post comment count
-                const { data: post, error: postError } = await supabase
-                    .from('posts')
-                    .select('comments_count')
-                    .eq('id', postId)
-                    .single();
-                
-                if (!postError && post) {
-                    const updatedCount = (post.comments_count || 0) + 1;
-                    
-                    const { error: updateError } = await supabase
-                        .from('posts')
-                        .update({
-                            comments_count: updatedCount,
-                            updated_at: new Date().toISOString()
-                        })
-                        .eq('id', postId);
-                    
-                    if (updateError) throw updateError;
-                }
-                
-                // Clear input
-                if (commentInput) commentInput.value = '';
-                
-                // Show success
-                const originalText = commentBtn.textContent;
-                commentBtn.textContent = 'Posted!';
-                setTimeout(() => {
-                    commentBtn.textContent = originalText;
-                }, 1500);
-                
-            } catch (error) {
-                console.error('Error posting comment:', error);
-                alert('Error posting comment. Please try again.');
-            }
+            // Show success
+            const originalText = commentBtn.textContent;
+            commentBtn.textContent = 'Posted!';
+            setTimeout(() => {
+                commentBtn.textContent = originalText;
+            }, 1500);
+            
+        } catch (error) {
+            console.error('❌ Error posting comment:', error);
+            alert('Error posting comment. Please try again.');
         }
+    }
 
-        // Load suggestions
-        async function loadSuggestions() {
-            try {
-                // Get random users (excluding current user)
-                const { data: users, error } = await supabase
-                    .from('users')
-                    .select('*')
-                    .neq('uid', currentUser.id)
-                    .not('username', 'is', null)
-                    .limit(5);
-                
-                if (error) throw error;
-                
-                let suggestionsHTML = '';
-                let count = 0;
-                
-                users.forEach(user => {
-                    if (count >= 3) return;
-                    
-                    suggestionsHTML += `
-                        <div class="suggestion">
-                            <div class="suggestion-user">
-                                <img src="${user.photoURL || getDefaultAvatar()}" 
-                                     alt="${user.username}" 
-                                     class="suggestion-avatar">
-                                <div class="suggestion-info">
-                                    <div class="suggestion-username">${user.username}</div>
-                                    <div class="suggestion-desc">Suggested for you</div>
+    // ============================
+    // EXPLORE PAGE FUNCTIONS
+    // ============================
+    // Load explore content
+    async function loadExploreContent() {
+        try {
+            console.log('🔍 Loading explore content...');
+            exploreGrid.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading explore content...</div>';
+            
+            // Get random posts for explore page
+            const { data: posts, error } = await supabase
+                .from('posts')
+                .select('*')
+                .order('created_at', { ascending: false })
+                .limit(30);
+            
+            if (error) throw error;
+            
+            if (posts && posts.length > 0) {
+                let exploreHTML = '';
+                posts.forEach(post => {
+                    exploreHTML += `
+                        <div class="explore-item" data-post-id="${post.id}">
+                            <img src="${post.media_urls[0]}" alt="Post">
+                            <div class="explore-item-overlay">
+                                <div class="explore-item-stats">
+                                    <div class="explore-stat">
+                                        <i class="fas fa-heart"></i>
+                                        <span>${post.likes_count || 0}</span>
+                                    </div>
+                                    <div class="explore-stat">
+                                        <i class="fas fa-comment"></i>
+                                        <span>${post.comments_count || 0}</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="suggestion-follow">Follow</div>
                         </div>
                     `;
-                    count++;
                 });
                 
-                suggestionsList.innerHTML = suggestionsHTML;
+                exploreGrid.innerHTML = exploreHTML;
                 
-                // Add follow button event listeners
-                document.querySelectorAll('.suggestion-follow').forEach(btn => {
-                    btn.addEventListener('click', handleFollow);
+                // Add click event to explore items
+                document.querySelectorAll('.explore-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const postId = item.dataset.postId;
+                        alert(`Viewing post ${postId}`);
+                    });
                 });
                 
-            } catch (error) {
-                console.error('Error loading suggestions:', error);
-            }
-        }
-
-        // Handle follow
-        function handleFollow(e) {
-            const followBtn = e.target;
-            const username = followBtn.closest('.suggestion').querySelector('.suggestion-username').textContent;
-            
-            if (followBtn.textContent === 'Follow') {
-                followBtn.textContent = 'Following';
-                followBtn.style.color = '#262626';
-                console.log(`Started following ${username}`);
+                console.log(`✅ Loaded ${posts.length} explore items`);
             } else {
-                followBtn.textContent = 'Follow';
-                followBtn.style.color = '#E1306C';
-                console.log(`Unfollowed ${username}`);
+                exploreGrid.innerHTML = '<div class="no-content"><h3>No content to explore yet</h3></div>';
             }
+            
+        } catch (error) {
+            console.error('❌ Error loading explore content:', error);
+            exploreGrid.innerHTML = '<div class="error">Error loading explore content.</div>';
         }
+    }
 
-        // Handle search
-        function handleSearch(e) {
-            const query = e.target.value.toLowerCase().trim();
-            console.log('Search query:', query);
-        }
-
-        // Handle Google sign in
-        async function handleGoogleSignIn() {
-            try {
-                const { error } = await supabase.auth.signInWithOAuth({
-                    provider: 'google',
-                    options: {
-                        redirectTo: window.location.origin
+    // ============================
+    // MESSAGING FUNCTIONS
+    // ============================
+    // Load messages
+    async function loadMessages() {
+        try {
+            console.log('📨 Loading messages...');
+            conversationsList.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading messages...</div>';
+            
+            // Get conversations where current user is a participant
+            const { data: conversationsData, error } = await supabase
+                .from('conversations')
+                .select('*')
+                .contains('participants', [currentUser.id])
+                .order('last_updated', { ascending: false });
+            
+            if (error) throw error;
+            
+            conversations = conversationsData || [];
+            
+            if (conversations.length > 0) {
+                let conversationsHTML = '';
+                
+                for (const conversation of conversations) {
+                    // Get other participant's info
+                    const otherParticipantId = conversation.participants.find(id => id !== currentUser.id);
+                    if (otherParticipantId) {
+                        const { data: userData, error: userError } = await supabase
+                            .from('users')
+                            .select('*')
+                            .eq('uid', otherParticipantId)
+                            .single();
+                        
+                        if (!userError && userData) {
+                            conversationsHTML += `
+                                <div class="conversation" data-conversation-id="${conversation.id}" data-user-id="${otherParticipantId}">
+                                    <img src="${userData.photoURL || getDefaultAvatar()}" 
+                                         alt="${userData.username}" 
+                                         class="conversation-avatar">
+                                    <div class="conversation-info">
+                                        <div class="conversation-name">${userData.username}</div>
+                                        <div class="conversation-last-message">${conversation.last_message || 'No messages yet'}</div>
+                                    </div>
+                                    <div class="conversation-time">${formatTime(new Date(conversation.last_updated))}</div>
+                                    ${conversation.unread_count > 0 ? `<div class="conversation-unread">${conversation.unread_count}</div>` : ''}
+                                </div>
+                            `;
+                        }
                     }
+                }
+                
+                conversationsList.innerHTML = conversationsHTML;
+                
+                // Add click event to conversations
+                document.querySelectorAll('.conversation').forEach(conv => {
+                    conv.addEventListener('click', () => {
+                        const conversationId = conv.dataset.conversationId;
+                        const userId = conv.dataset.userId;
+                        openChat(conversationId, userId);
+                    });
                 });
                 
-                if (error) throw error;
-            } catch (error) {
-                console.error('Error signing in:', error);
-                alert('Error signing in: ' + error.message);
-            }
-        }
-
-        // Handle sign out
-        async function handleSignOut() {
-            try {
-                const { error } = await supabase.auth.signOut();
-                if (error) throw error;
-            } catch (error) {
-                console.error('Error signing out:', error);
-            }
-        }
-
-        // Handle user signed out
-        function handleUserSignedOut() {
-            currentUser = null;
-            currentUserData = null;
-            allStories = [];
-            conversations = [];
-            
-            authModal.style.display = 'flex';
-            usernameModal.style.display = 'none';
-            storyUploadModal.style.display = 'none';
-            createPostModal.style.display = 'none';
-            storyViewerModal.style.display = 'none';
-            
-            // Clear UI
-            navIcons.innerHTML = '';
-            postsContainer.innerHTML = '<div class="loading">Please sign in to continue</div>';
-            exploreContainer.style.display = 'none';
-            messagesContainer.style.display = 'none';
-            sidebar.style.display = 'none';
-        }
-
-        // Utility functions
-        function validateFile(file, maxSizeMB) {
-            const maxSize = maxSizeMB * 1024 * 1024;
-            
-            if (file.size > maxSize) {
-                alert(`File size must be less than ${maxSizeMB}MB`);
-                return false;
+                console.log(`✅ Loaded ${conversations.length} conversations`);
+            } else {
+                conversationsList.innerHTML = '<div class="no-conversations"><h3>No messages yet</h3><p>Start a conversation!</p></div>';
             }
             
-            const validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-            const validVideoTypes = ['video/mp4', 'video/webm'];
+            // Hide chat by default
+            chatContainer.style.display = 'none';
             
-            if (!validImageTypes.includes(file.type) && !validVideoTypes.includes(file.type)) {
-                alert('Please select an image or video file');
-                return false;
-            }
-            
-            return true;
+        } catch (error) {
+            console.error('❌ Error loading messages:', error);
+            conversationsList.innerHTML = '<div class="error">Error loading messages.</div>';
         }
+    }
 
-        function getDefaultAvatar() {
-            return 'https://images.unsplash.com/photo-1494790108755-2616c113a1c1?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80';
-        }
-
-        function hideModal(modal) {
-            modal.style.display = 'none';
-        }
-
-        function formatTime(date) {
-            if (!date) return '';
+    // ============================
+    // SUGGESTIONS FUNCTIONS
+    // ============================
+    // Load suggestions
+    async function loadSuggestions() {
+        try {
+            console.log('👥 Loading suggestions...');
             
-            const now = new Date();
-            const diffMs = now - date;
-            const diffMins = Math.floor(diffMs / 60000);
-            const diffHours = Math.floor(diffMs / 3600000);
-            const diffDays = Math.floor(diffMs / 86400000);
+            // Get random users (excluding current user)
+            const { data: users, error } = await supabase
+                .from('users')
+                .select('*')
+                .neq('uid', currentUser.id)
+                .not('username', 'is', null)
+                .limit(5);
             
-            if (diffMins < 1) return 'Just now';
-            if (diffMins < 60) return `${diffMins}m ago`;
-            if (diffHours < 24) return `${diffHours}h ago`;
-            if (diffDays < 7) return `${diffDays}d ago`;
+            if (error) throw error;
             
-            return date.toLocaleDateString();
-        }
-
-        function getTimeAgo(date) {
-            if (!date) return '';
+            let suggestionsHTML = '';
+            let count = 0;
             
-            const seconds = Math.floor((new Date() - date) / 1000);
-            
-            let interval = Math.floor(seconds / 31536000);
-            if (interval >= 1) return interval + "y";
-            
-            interval = Math.floor(seconds / 2592000);
-            if (interval >= 1) return interval + "mo";
-            
-            interval = Math.floor(seconds / 86400);
-            if (interval >= 1) return interval + "d";
-            
-            interval = Math.floor(seconds / 3600);
-            if (interval >= 1) return interval + "h";
-            
-            interval = Math.floor(seconds / 60);
-            if (interval >= 1) return interval + "m";
-            
-            return Math.floor(seconds) + "s";
-        }
-
-        function createPostHTML(post) {
-            const isLiked = post.liked_by?.includes(currentUser?.id);
-            const timeAgo = getTimeAgo(new Date(post.created_at));
-            
-            return `
-                <div class="post" id="post-${post.id}">
-                    <div class="post-header">
-                        <div class="post-user">
-                            <img src="${post.user_avatar || getDefaultAvatar()}" 
-                                 alt="${post.username}" 
-                                 class="post-user-avatar">
-                            <div class="post-user-info">
-                                <div class="post-username">${post.username}</div>
-                                ${post.location ? `<div class="post-location">${post.location}</div>` : ''}
+            users.forEach(user => {
+                if (count >= 3) return;
+                
+                suggestionsHTML += `
+                    <div class="suggestion">
+                        <div class="suggestion-user">
+                            <img src="${user.photoURL || getDefaultAvatar()}" 
+                                 alt="${user.username}" 
+                                 class="suggestion-avatar">
+                            <div class="suggestion-info">
+                                <div class="suggestion-username">${user.username}</div>
+                                <div class="suggestion-desc">Suggested for you</div>
                             </div>
                         </div>
-                        <div class="post-options">
-                            <i class="fas fa-ellipsis-h"></i>
+                        <div class="suggestion-follow">Follow</div>
+                    </div>
+                `;
+                count++;
+            });
+            
+            suggestionsList.innerHTML = suggestionsHTML;
+            
+            // Add follow button event listeners
+            document.querySelectorAll('.suggestion-follow').forEach(btn => {
+                btn.addEventListener('click', handleFollow);
+            });
+            
+            console.log(`✅ Loaded ${count} suggestions`);
+            
+        } catch (error) {
+            console.error('❌ Error loading suggestions:', error);
+        }
+    }
+
+    // Handle follow
+    function handleFollow(e) {
+        const followBtn = e.target;
+        const username = followBtn.closest('.suggestion').querySelector('.suggestion-username').textContent;
+        
+        if (followBtn.textContent === 'Follow') {
+            followBtn.textContent = 'Following';
+            followBtn.style.color = '#262626';
+            console.log(`👤 Started following ${username}`);
+        } else {
+            followBtn.textContent = 'Follow';
+            followBtn.style.color = '#E1306C';
+            console.log(`👤 Unfollowed ${username}`);
+        }
+    }
+
+    // ============================
+    // UTILITY FUNCTIONS
+    // ============================
+    function validateFile(file, maxSizeMB) {
+        const maxSize = maxSizeMB * 1024 * 1024;
+        
+        if (file.size > maxSize) {
+            alert(`File size must be less than ${maxSizeMB}MB`);
+            return false;
+        }
+        
+        const validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        const validVideoTypes = ['video/mp4', 'video/webm'];
+        
+        if (!validImageTypes.includes(file.type) && !validVideoTypes.includes(file.type)) {
+            alert('Please select an image or video file');
+            return false;
+        }
+        
+        return true;
+    }
+
+    function getDefaultAvatar() {
+        return 'https://images.unsplash.com/photo-1494790108755-2616c113a1c1?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80';
+    }
+
+    function hideModal(modal) {
+        modal.style.display = 'none';
+    }
+
+    function formatTime(date) {
+        if (!date) return '';
+        
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+        
+        if (diffMins < 1) return 'Just now';
+        if (diffMins < 60) return `${diffMins}m ago`;
+        if (diffHours < 24) return `${diffHours}h ago`;
+        if (diffDays < 7) return `${diffDays}d ago`;
+        
+        return date.toLocaleDateString();
+    }
+
+    function getTimeAgo(date) {
+        if (!date) return '';
+        
+        const seconds = Math.floor((new Date() - date) / 1000);
+        
+        let interval = Math.floor(seconds / 31536000);
+        if (interval >= 1) return interval + "y";
+        
+        interval = Math.floor(seconds / 2592000);
+        if (interval >= 1) return interval + "mo";
+        
+        interval = Math.floor(seconds / 86400);
+        if (interval >= 1) return interval + "d";
+        
+        interval = Math.floor(seconds / 3600);
+        if (interval >= 1) return interval + "h";
+        
+        interval = Math.floor(seconds / 60);
+        if (interval >= 1) return interval + "m";
+        
+        return Math.floor(seconds) + "s";
+    }
+
+    function createPostHTML(post) {
+        const isLiked = post.liked_by?.includes(currentUser?.id);
+        const timeAgo = getTimeAgo(new Date(post.created_at));
+        
+        return `
+            <div class="post" id="post-${post.id}">
+                <div class="post-header">
+                    <div class="post-user">
+                        <img src="${post.user_avatar || getDefaultAvatar()}" 
+                             alt="${post.username}" 
+                             class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-username">${post.username}</div>
+                            ${post.location ? `<div class="post-location">${post.location}</div>` : ''}
                         </div>
                     </div>
-                    
-                    ${post.media_types[0] === 'image' ? 
-                        `<img src="${post.media_urls[0]}" alt="Post" class="post-media">` :
-                        `<video src="${post.media_urls[0]}" class="post-video" controls></video>`
-                    }
-                    
-                    <div class="post-actions">
-                        <div class="post-actions-left">
-                            <button class="post-action like-btn ${isLiked ? 'liked' : ''}" data-post-id="${post.id}">
-                                <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i>
-                            </button>
-                            <button class="post-action comment-btn" data-post-id="${post.id}">
-                                <i class="far fa-comment"></i>
-                            </button>
-                            <button class="post-action">
-                                <i class="far fa-paper-plane"></i>
-                            </button>
-                        </div>
-                        <button class="post-action">
-                            <i class="far fa-bookmark"></i>
-                        </button>
-                    </div>
-                    
-                    <div class="post-likes" id="likes-count-${post.id}">${post.likes_count || 0} likes</div>
-                    
-                    <div class="post-caption">
-                        <span class="post-caption-username">${post.username}</span>
-                        ${post.caption || ''}
-                    </div>
-                    
-                    <div class="post-comments">View all ${post.comments_count || 0} comments</div>
-                    
-                    <div class="post-time">${timeAgo}</div>
-                    
-                    <div class="add-comment">
-                        <input type="text" class="comment-input" data-post-id="${post.id}" placeholder="Add a comment...">
-                        <button class="comment-btn" data-post-id="${post.id}">Post</button>
+                    <div class="post-options">
+                        <i class="fas fa-ellipsis-h"></i>
                     </div>
                 </div>
-            `;
-        }
+                
+                ${post.media_types[0] === 'image' ? 
+                    `<img src="${post.media_urls[0]}" alt="Post" class="post-media">` :
+                    `<video src="${post.media_urls[0]}" class="post-video" controls></video>`
+                }
+                
+                <div class="post-actions">
+                    <div class="post-actions-left">
+                        <button class="post-action like-btn ${isLiked ? 'liked' : ''}" data-post-id="${post.id}">
+                            <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i>
+                        </button>
+                        <button class="post-action comment-btn" data-post-id="${post.id}">
+                            <i class="far fa-comment"></i>
+                        </button>
+                        <button class="post-action">
+                            <i class="far fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <button class="post-action">
+                        <i class="far fa-bookmark"></i>
+                    </button>
+                </div>
+                
+                <div class="post-likes" id="likes-count-${post.id}">${post.likes_count || 0} likes</div>
+                
+                <div class="post-caption">
+                    <span class="post-caption-username">${post.username}</span>
+                    ${post.caption || ''}
+                </div>
+                
+                <div class="post-comments">View all ${post.comments_count || 0} comments</div>
+                
+                <div class="post-time">${timeAgo}</div>
+                
+                <div class="add-comment">
+                    <input type="text" class="comment-input" data-post-id="${post.id}" placeholder="Add a comment...">
+                    <button class="comment-btn" data-post-id="${post.id}">Post</button>
+                </div>
+            </div>
+        `;
+    }
 
-        // Initialize the app
-        initApp();
-        console.log('Instagram Clone with Supabase initialized!');
+    // Handle search
+    function handleSearch(e) {
+        const query = e.target.value.toLowerCase().trim();
+        console.log('🔍 Search query:', query);
+        // In a real app, you would implement search functionality here
+    }
+
+    // Initialize the app
+    console.log('🎉 InstaConnect with Supabase initialized!');
+    console.log('==========================================');
+    console.log('📊 Configuration:');
+    console.log('- Supabase URL:', SUPABASE_URL);
+    console.log('- GitHub Pages:', GITHUB_PAGES_URL);
+    console.log('- Current User:', currentUser ? 'Logged in' : 'Not logged in');
+    console.log('==========================================');
 
     </script>
-</body>
-    </html>
