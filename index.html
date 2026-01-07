@@ -1854,7 +1854,48 @@
     const suggestionsList = document.getElementById('suggestionsList');
     const searchInput = document.getElementById('searchInput');
     const globalLoading = document.getElementById('globalLoading');
+    
+     // SAVE USERNAME FUNCTION
+     async function saveUsername() {
+      const username = document
+        .getElementById("usernameInput")
+        .value
+        .trim()
+        .toLowerCase();
 
+      if (!username) {
+        alert("Enter a username");
+        return;
+      }
+
+      // Get logged-in user
+      const {
+        data: { user },
+        error: userError
+      } = await supabase.auth.getUser();
+
+      if (userError || !user) {
+        alert("You are not logged in");
+        return;
+      }
+
+      // UPSERT username
+      const { error } = await supabase
+        .from("users")
+        .upsert({
+          id: user.id,
+          username: username
+        });
+
+      if (error) {
+        console.error("Save error:", error);
+        alert(error.message);
+        return;
+      }
+
+      // Success → redirect
+      window.location.href = "home.html";
+    } 
     // App State
     let currentUser = null;
     let currentUserData = null;
@@ -3449,4 +3490,4 @@
     window.testSupabaseConnection = testSupabaseConnection;
 </script>
 </body>
-    </html>
+</html>
