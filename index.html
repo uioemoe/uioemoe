@@ -1756,7 +1756,7 @@
     const GITHUB_PAGES_URL = 'https://uioemoe.github.io/uioemoe/';
     
     // Initialize Supabase client with CORRECT settings for GitHub Pages
-    const supabaseClient = window.supabase.createClient(
+    const  = window.supabase.createClient(
         SUPABASE_URL,
         SUPABASE_ANON_KEY,
         {
@@ -2136,14 +2136,24 @@
     // ============================
     // Handle Google sign in - UPDATED FOR GITHUB PAGES
     async function handleGoogleSignIn() {
-        console.log('🔐 Starting Google OAuth...');
-        
-        try {
-            const { data, error } = await supabase.auth.signInWithOAuth({
-                provider: 'google',
-                options: {
-                    // CRITICAL: Must use your GitHub Pages URL
-                    redirectTo: GITHUB_PAGES_URL,
+  console.log('Starting Google OAuth...');
+  
+  const { data, error } = await supabaseClient.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: GITHUB_PAGES_URL,
+      queryParams: {
+        access_type: 'offline',
+        prompt: 'consent'
+      }
+    }
+  });
+
+  if (error) {
+    console.error('Google sign-in error:', error);
+    alert('Google sign-in failed: ' + error.message);
+  }
+}
                     queryParams: {
                         access_type: 'offline',
                         prompt: 'consent'
