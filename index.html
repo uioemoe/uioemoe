@@ -2723,13 +2723,21 @@ function hideLoading() {
 
     // Handle story file selection
     function handleStoryFileSelect(e) {
-        const file = e.target.files[0];
-        if (!file) return;
-        
-        if (!validateFile(file, 30)) return;
-        
-        selectedStoryFile = file;
-        storyFileType = file.type.startsWith('image/') ? 'image' : 'video';
+        const filePath = `${user.id}/${Date.now()}_${file.name}`;
+
+const { data: urlData } = supabase.storage
+  .from('posts')
+  .getPublicUrl(filePath);
+
+const imageUrl = urlData.publicUrl;
+
+
+if (error) {
+  console.error('Upload error:', error);
+  alert(error.message);
+  return;
+}
+
         
         const reader = new FileReader();
         reader.onload = function(e) {
