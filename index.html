@@ -2275,31 +2275,110 @@
         }
     }
 
-    // Save username
-    async function saveUsername() {
-        const username = usernameInput.value.trim().toLowerCase();
-        
-        try {
-            const { error } = await supabaseClient
-                .from('users')
-                .update({
-                    username: username,
-                    updated_at: new Date().toISOString()
-                })
-                .eq('uid', currentUser.id);
-            
-            if (error) throw error;
-            
-            currentUserData.username = username;
-            usernameModal.style.display = 'none';
-            showAppContent();
-            
-            console.log('✅ Username saved:', username);
-        } catch (error) {
-            console.error('❌ Error saving username:', error);
-            alert('Error saving username. Please try again.');
-        }
+   // Save username - FIXED VERSION
+async function saveUsername() {
+    const username = usernameInput.value.trim().toLowerCase();
+    
+    if (!username || username.length < 3) {
+        alert('Username must be at least 3 characters');
+        return;
     }
+    
+    try {
+        showLoading();
+        
+        // First, update the existing user record
+        const { error: updateError } = await supabaseClient
+            .from('users')
+            .update({
+                username: username,
+                updated_at: new Date().toISOString()
+            })
+            .eq('uid', currentUser.id);
+        
+        if (updateError) {
+            console.error('Update error:', updateError);
+            
+            // If update fails, try to insert new user
+            const userData = {
+                uid: currentUser.id,
+                username: username,
+                email: currentUser.email,
+                display_name: currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'User',
+                photo_url: currentUser.user_metadata?.avatar_url || getDefaultAvatar(),
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+                followers: 0,
+                following: 0,
+                posts: 0,
+                bio: '',
+                website: ''
+            };
+            
+            const { error: insertError } = await supabaseClient
+                .from('users')
+                .insert([userData]);
+            
+            if (insertError) {
+                console.error('Insert error:', insertError);
+                
+                // Last resort: try without some fields
+                const simpleUserData = {
+                    uid: currentUser.id,
+                    username: username,
+                    email: currentUser.email,
+                    created_at: new Date().toISOString()
+                };
+                
+                const { error: simpleError } = await supabaseClient
+                    .from('users')
+                    .insert([simpleUserData]);
+                
+                if (simpleError) {
+                    throw simpleError;
+                }
+            }
+        }
+        
+        currentUserData = {
+            ...currentUserData,
+            username: username
+        };
+        
+        hideLoading();
+        usernameModal.style.display = 'none';
+        showAppContent();
+        
+        console.log('✅ Username saved:', username);
+        
+    } catch (error) {
+        hideLoading();
+        console.error('❌ Error saving username:', error);
+        
+        // Show more detailed error message
+        let errorMsg = 'Error saving username. Please try again.';
+        if (error.message.includes('duplicate key')) {
+            errorMsg = 'Username is already taken. Please choose another.';
+        } else if (error.message.includes('auth')) {
+            errorMsg = 'Authentication error. Please sign in again.';
+        } else if (error.message.includes('permission')) {
+            errorMsg = 'Database permission error. Check RLS policies.';
+        }
+        
+        alert(errorMsg + '\n\nTechnical details: ' + error.message);
+    }
+}
+
+// Helper functions
+function showLoading() {
+    saveUsernameBtn.disabled = true;
+    saveUsernameBtn.textContent = 'Saving...';
+}
+
+function hideLoading() {
+    saveUsernameBtn.disabled = false;
+    saveUsernameBtn.textContent = 'Continue';
+}
 
     // Handle sign out
     async function handleSignOut() {
