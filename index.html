@@ -1634,9 +1634,6 @@
             <h2>Choose Your Username</h2>
             <p>Your username is how other users will find you on InstaConnect</p>
             <input type="text" class="username-input" id="usernameInput" placeholder="Choose a username" maxlength="20">
-
-<button onclick="saveUsername()">Continue</button>
-
             <div class="username-check" id="usernameCheck"></div>
             <button class="save-username-btn" id="saveUsernameBtn" disabled>Continue</button>
         </div>
@@ -1748,14 +1745,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Global Loading Overlay -->
-    <div id="globalLoading" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
-        <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
-            <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: #E1306C;"></i>
-            <p style="margin-top: 10px;">Loading...</p>
-        </div>
-    </div>
      
     <script>
     // ============================
@@ -1767,11 +1756,11 @@
     const GITHUB_PAGES_URL = 'https://uioemoe.github.io/uioemoe/';
     
     // Initialize Supabase client with CORRECT settings for GitHub Pages
-    const supabaseClient = window.supabase.createClient(
+    const supabase = window.supabase.createClient(
         SUPABASE_URL,
         SUPABASE_ANON_KEY,
         {
-            // CRITICAL: PKCE flow is REQUIRED for static sites
+            // CRITICAL: PKCE flow is REQUIRED for GitHub Pages
             auth: {
                 autoRefreshToken: false,
                 persistSession: true,
@@ -1856,48 +1845,6 @@
     const suggestionsContainer = document.getElementById('suggestionsContainer');
     const suggestionsList = document.getElementById('suggestionsList');
     const searchInput = document.getElementById('searchInput');
-    const globalLoading = document.getElementById('globalLoading');
-
-    async function saveUsername() {
-  // Get input
-  const username = document.getElementById("usernameInput").value
-    .trim()
-    .toLowerCase();
-
-  if (!username) {
-    alert("Enter a username");
-    return;
-  }
-
-  // Get logged-in user
-  const {
-    data: { user },
-    error: userError
-  } = await supabase.auth.getUser();
-
-  if (userError || !user) {
-    alert("You are not logged in");
-    return;
-  }
-
-  // UPSERT username
-  const { error } = await supabase
-    .from("users")
-    .upsert({
-      id: user.id,
-      username: username
-    });
-
-  if (error) {
-    console.error("Save error:", error);
-    alert(error.message);
-    return;
-  }
-
-  // Success
-  window.location.href = "home.html";
-}
-
 
     // App State
     let currentUser = null;
@@ -1906,6 +1853,7 @@
     let storyFileType = null;
     let allStories = [];
     let currentStoryIndex = 0;
+    let currentUserStoryIndex = 0;
     let storyProgressInterval = null;
     const storyDuration = 10000;
     let selectedPostFiles = [];
@@ -1966,7 +1914,7 @@
 
     // Check authentication state
     async function checkAuthState() {
-        const { data: { session } } = await supabaseClient.auth.getSession();
+        const { data: { session } } = await supabase.auth.getSession();
         
         if (session) {
             currentUser = session.user;
@@ -1978,7 +1926,7 @@
         }
         
         // Listen for auth changes
-        supabaseClient.auth.onAuthStateChange(async (event, session) => {
+        supabase.auth.onAuthStateChange(async (event, session) => {
             console.log('🔄 Auth state changed:', event);
             
             if (event === 'SIGNED_IN' && session) {
@@ -1998,7 +1946,7 @@
         
         try {
             // Check if we can list files (tests if bucket has proper policies)
-            const { data, error } = await supabaseClient.storage
+            const { data, error } = await supabase.storage
                 .from('media')
                 .list('', { limit: 1 });
             
@@ -2058,7 +2006,7 @@
         
         try {
             // Test 1: Auth session
-            const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+            const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
             if (sessionError) {
                 console.error('❌ Auth test failed:', sessionError.message);
             } else {
@@ -2066,7 +2014,7 @@
             }
             
             // Test 2: Database
-            const { data: dbData, error: dbError } = await supabaseClient
+            const { data: dbData, error: dbError } = await supabase
                 .from('users')
                 .select('count')
                 .limit(1);
@@ -2077,7 +2025,7 @@
             }
             
             // Test 3: Storage
-            const { data: storageData, error: storageError } = await supabaseClient.storage
+            const { data: storageData, error: storageError } = await supabase.storage
                 .from('media')
                 .list('', { limit: 1 });
             if (storageError) {
@@ -2188,20 +2136,22 @@
     // ============================
     // Handle Google sign in - UPDATED FOR GITHUB PAGES
     async function handleGoogleSignIn() {
+        console.log('🔐 Starting Google OAuth...');
+        
         try {
-            console.log('🔐 Starting Google OAuth...');
-            
-            const { error } = await supabaseClient.auth.signInWithOAuth({
+            const { data, error } = await supabase.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
+                    // CRITICAL: Must use your GitHub Pages URL
                     redirectTo: GITHUB_PAGES_URL,
                     queryParams: {
                         access_type: 'offline',
                         prompt: 'consent'
-                    }
+                    },
+                    scopes: 'email profile'
                 }
             });
-
+            
             if (error) {
                 console.error('❌ Google sign-in error:', error);
                 alert('Google sign-in failed: ' + error.message + 
@@ -2210,6 +2160,7 @@
             }
             
             console.log('✅ Google OAuth initiated');
+            
         } catch (error) {
             console.error('❌ Error signing in with Google:', error);
             alert('Error signing in with Google. Please check console for details.');
@@ -2221,7 +2172,7 @@
         console.log('👤 User signed in:', user);
         
         // Get or create user profile
-        const { data: userProfile, error } = await supabaseClient
+        const { data: userProfile, error } = await supabase
             .from('users')
             .select('*')
             .eq('uid', user.id)
@@ -2260,7 +2211,7 @@
                 website: ''
             };
             
-            const { data, error } = await supabaseClient
+            const { data, error } = await supabase
                 .from('users')
                 .insert([userData])
                 .select()
@@ -2302,7 +2253,7 @@
         }
         
         // Check if username exists
-        const { data, error } = await supabaseClient
+        const { data, error } = await supabase
             .from('users')
             .select('username')
             .eq('username', username)
@@ -2324,7 +2275,7 @@
         const username = usernameInput.value.trim().toLowerCase();
         
         try {
-            const { error } = await supabaseClient
+            const { error } = await supabase
                 .from('users')
                 .update({
                     username: username,
@@ -2349,7 +2300,7 @@
     async function handleSignOut() {
         try {
             console.log('👋 Signing out...');
-            const { error } = await supabaseClient.auth.signOut();
+            const { error } = await supabase.auth.signOut();
             if (error) throw error;
         } catch (error) {
             console.error('❌ Error signing out:', error);
@@ -2510,7 +2461,7 @@
             await loadStories();
             
             // Load posts
-            const { data: posts, error } = await supabaseClient
+            const { data: posts, error } = await supabase
                 .from('posts')
                 .select('*')
                 .order('created_at', { ascending: false })
@@ -2571,7 +2522,7 @@
             // Get stories from last 24 hours
             const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
             
-            const { data: stories, error } = await supabaseClient
+            const { data: stories, error } = await supabase
                 .from('stories')
                 .select('*')
                 .gte('created_at', oneDayAgo)
@@ -2737,21 +2688,21 @@
             
             console.log('📁 Uploading file:', fileName);
             
-            const { data: uploadData, error: uploadError } = await supabaseClient.storage
+            const { data: uploadData, error: uploadError } = await supabase.storage
                 .from('media')
                 .upload(fileName, selectedStoryFile);
             
             if (uploadError) throw uploadError;
             
             // Get public URL
-            const { data: { publicUrl } } = supabaseClient.storage
+            const { data: { publicUrl } } = supabase.storage
                 .from('media')
                 .getPublicUrl(fileName);
             
             console.log('✅ File uploaded, URL:', publicUrl);
             
             // Save to database
-            const { error: dbError } = await supabaseClient
+            const { error: dbError } = await supabase
                 .from('stories')
                 .insert([{
                     user_id: currentUser.id,
@@ -2888,14 +2839,14 @@
                 
                 console.log(`📁 Uploading file ${i + 1}/${selectedPostFiles.length}:`, fileName);
                 
-                const { data: uploadData, error: uploadError } = await supabaseClient.storage
+                const { data: uploadData, error: uploadError } = await supabase.storage
                     .from('media')
                     .upload(fileName, file);
                 
                 if (uploadError) throw uploadError;
                 
                 // Get public URL
-                const { data: { publicUrl } } = supabaseClient.storage
+                const { data: { publicUrl } } = supabase.storage
                     .from('media')
                     .getPublicUrl(fileName);
                 
@@ -2906,7 +2857,7 @@
             console.log('✅ Files uploaded, URLs:', mediaUrls);
             
             // Save post to database
-            const { error } = await supabaseClient
+            const { error } = await supabase
                 .from('posts')
                 .insert([{
                     user_id: currentUser.id,
@@ -2928,7 +2879,7 @@
             console.log('✅ Post saved to database');
             
             // Update user's post count
-            const { error: updateError } = await supabaseClient
+            const { error: updateError } = await supabase
                 .from('users')
                 .update({
                     posts: (currentUserData.posts || 0) + 1,
@@ -2968,7 +2919,7 @@
         console.log(`❤️ Handling like for post ${postId}`);
         
         try {
-            const { data: post, error } = await supabaseClient
+            const { data: post, error } = await supabase
                 .from('posts')
                 .select('*')
                 .eq('id', postId)
@@ -3003,7 +2954,7 @@
             }
             
             // Update post in database
-            const { error: updateError } = await supabaseClient
+            const { error: updateError } = await supabase
                 .from('posts')
                 .update({
                     liked_by: updatedLikedBy,
@@ -3038,7 +2989,7 @@
         
         try {
             // Add comment to database
-            const { error } = await supabaseClient
+            const { error } = await supabase
                 .from('comments')
                 .insert([{
                     post_id: postId,
@@ -3054,7 +3005,7 @@
             console.log('✅ Comment posted');
             
             // Update post comment count
-            const { data: post, error: postError } = await supabaseClient
+            const { data: post, error: postError } = await supabase
                 .from('posts')
                 .select('comments_count')
                 .eq('id', postId)
@@ -3063,7 +3014,7 @@
             if (!postError && post) {
                 const updatedCount = (post.comments_count || 0) + 1;
                 
-                const { error: updateError } = await supabaseClient
+                const { error: updateError } = await supabase
                     .from('posts')
                     .update({
                         comments_count: updatedCount,
@@ -3102,7 +3053,7 @@
             exploreGrid.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading explore content...</div>';
             
             // Get random posts for explore page
-            const { data: posts, error } = await supabaseClient
+            const { data: posts, error } = await supabase
                 .from('posts')
                 .select('*')
                 .order('created_at', { ascending: false })
@@ -3163,7 +3114,7 @@
             conversationsList.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading messages...</div>';
             
             // Get conversations where current user is a participant
-            const { data: conversationsData, error } = await supabaseClient
+            const { data: conversationsData, error } = await supabase
                 .from('conversations')
                 .select('*')
                 .contains('participants', [currentUser.id])
@@ -3180,7 +3131,7 @@
                     // Get other participant's info
                     const otherParticipantId = conversation.participants.find(id => id !== currentUser.id);
                     if (otherParticipantId) {
-                        const { data: userData, error: userError } = await supabaseClient
+                        const { data: userData, error: userError } = await supabase
                             .from('users')
                             .select('*')
                             .eq('uid', otherParticipantId)
@@ -3238,7 +3189,7 @@
             console.log('👥 Loading suggestions...');
             
             // Get random users (excluding current user)
-            const { data: users, error } = await supabaseClient
+            const { data: users, error } = await supabase
                 .from('users')
                 .select('*')
                 .neq('uid', currentUser.id)
@@ -3439,48 +3390,7 @@
         // In a real app, you would implement search functionality here
     }
 
-    // ============================
-    // STORY VIEWER FUNCTIONS (Placeholders)
-    // ============================
-    function openStoryViewer(index) {
-        console.log('Opening story viewer for index:', index);
-        // Implementation needed
-    }
-
-    function closeStoryViewer() {
-        // Implementation needed
-    }
-
-    function showPreviousStory() {
-        // Implementation needed
-    }
-
-    function showNextStory() {
-        // Implementation needed
-    }
-
-    function handleStoryReply(e) {
-        // Implementation needed
-    }
-
-    function startNewMessage() {
-        console.log('Starting new message');
-        // Implementation needed
-    }
-
-    function openChat(conversationId, userId) {
-        console.log('Opening chat:', conversationId, userId);
-        // Implementation needed
-    }
-
-    function sendMessage() {
-        console.log('Sending message');
-        // Implementation needed
-    }
-
-    // ============================
-    // INITIALIZE APP
-    // ============================
+    // Initialize the app
     console.log('🎉 InstaConnect with Supabase initialized!');
     console.log('==========================================');
     console.log('📊 Configuration:');
@@ -3489,8 +3399,4 @@
     console.log('- Current User:', currentUser ? 'Logged in' : 'Not logged in');
     console.log('==========================================');
 
-    // Make test function globally available
-    window.testSupabaseConnection = testSupabaseConnection;
 </script>
-</body>
-</html>
